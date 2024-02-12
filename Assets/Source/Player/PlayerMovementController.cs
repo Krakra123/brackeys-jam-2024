@@ -19,18 +19,31 @@ public class PlayerMovementController : MonoBehaviour
 
     [Header("Jumping")]
     [SerializeField]
-    public float _jumpHeight;
+    private float _jumpHeight;
     [Range(1f, 5f)] [SerializeField]
-    private float _onAirDownGravityScale;
+    private float _dragDownGravityScale;
     [Range(.1f, 10f)] [SerializeField]
     private float _onAirAcceleration;
     [Range(.1f, 10f)] [SerializeField]
     private float _onAirControl;
 
+    [Header("Helper")]
+    [SerializeField]
+    private float _coyoteTime;
+    [SerializeField]
+    private float _jumpBufferTime;
+
+    private bool _jumpEvent;
     private bool _canJump;
-    private bool _jumping;
+
+    private float _coyoteTimer;
+    private float _buferTimer;
 
     private Vector2 _desiredVelocity;
+
+    private float _defaultGravityScale;
+
+    private bool _jumping;
 
     public void AddVelocity(Vector2 velocityAdd)
     {
@@ -40,13 +53,15 @@ public class PlayerMovementController : MonoBehaviour
     public void DelegateStart()
     {
         _canJump = false;
+
+        _defaultGravityScale = manager.body.gravityScale;
     }
 
     public void DelegateUpdate()
     {
         if (_canJump && manager.inputManager.jump)
         {
-            _jumping = true;
+            _jumpEvent = true;
         }
     }
 
@@ -71,17 +86,45 @@ public class PlayerMovementController : MonoBehaviour
     }
     private void JumpingUpdate()
     {
-        if (_jumping)
+        if (_jumpEvent)
         {
+            _jumping = true;
             _desiredVelocity.y = _jumpHeight;
 
-            _jumping = false;
+            _jumpEvent = false;
+        }
+
+        if (_jumping && manager.stateManager.onGround && _desiredVelocity.y <= 0f) _jumping = false;
+
+        if (_jumping && _desiredVelocity.y <= 0)
+        {
+            manager.body.gravityScale = _defaultGravityScale * _dragDownGravityScale;
+        }
+        else
+        {
+            manager.body.gravityScale = _defaultGravityScale;
         }
     }
 
     private void JumpAvailabilityCheck()
     {
-        _canJump = manager.stateManager.onGround; //TODO
+        if (!manager.stateManager.onGround)
+        {
+            _coyoteTimer += Time.deltaTime;
+        }
+        else 
+        {
+            _coyoteTimer = 0f;
+        }
+
+        if (_coyoteTimer > _coyoteTime)
+        {
+            _canJump = false;
+        }
+        else 
+        {
+            _canJump = true;
+        }
     }
 
     private float MovementAcceleration()

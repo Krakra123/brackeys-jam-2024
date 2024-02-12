@@ -331,13 +331,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _runningSpeed: 15
-  _runningAcceleration: 0.6
+  _runningAcceleration: 0.8
   _runningDeceleration: 5
-  _runningTurnAcceleration: 3
+  _runningTurnAcceleration: 4
   _jumpHeight: 15
-  _onAirDownGravityScale: 1
+  _dragDownGravityScale: 1.5
   _onAirAcceleration: 0.4
-  _onAirControl: 3
+  _onAirControl: 4
+  _coyoteTime: 0.2
+  _jumpBufferTime: 0
 --- !u!114 &180939829
 MonoBehaviour:
   m_ObjectHideFlags: 0
