@@ -35,36 +35,38 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float _jumpBufferTime;
 
-    private bool _jumpEvent;
     private bool _canJump;
 
     private float _coyoteTimer;
     private float _bufferTimer;
-    private bool _jumpBufferCall = false;
+    private bool _jumpBufferReady;
 
+    private Queue<Vector2> _velocityAddingQueue = new();
     private Vector2 _desiredVelocity;
 
-    private float _defaultGravityScale;
-
-    private bool _jumping;
-
-    public void AddVelocity(Vector2 velocityAdd)
+    public void AddForce(Vector2 velocityAdd)
     {
-        _desiredVelocity += velocityAdd;
+        _velocityAddingQueue.Enqueue(velocityAdd);
     }
 
     public void DelegateStart()
     {
         _canJump = false;
 
-        _defaultGravityScale = manager.body.gravityScale;
+        _coyoteTimer = 0f;
+        _bufferTimer = 0f;
+        _jumpBufferReady = false;
     }
 
     public void DelegateUpdate()
     {
-        if (manager.inputManager.jump)
+        if (manager.inputManager.jump && _canJump)
         {
-            _jumpEvent = true;
+            JumpRaw();
+        }
+        if (manager.inputManager.jump && !_canJump)
+        {
+            _jumpBufferReady = true;
         }
     }
 
@@ -74,74 +76,19 @@ public class PlayerMovementController : MonoBehaviour
 
         JumpAvailabilityCheck();
 
-        MovingUpdate();
-        JumpingUpdate();
+        JumpBufferHandle();
+
+        MovingHandle();
 
         UpdateBodyVelocity();
     }
 
-    private void MovingUpdate()
+    private void MovingHandle()
     {
         float rawHorizontalVelocity = manager.inputManager.horizontalDirection * _runningSpeed;
 
-        float acceleration = MovementAcceleration();
+        float acceleration = MovementAccelerationCalculation();
         _desiredVelocity.x = Mathf.MoveTowards(_desiredVelocity.x, rawHorizontalVelocity, acceleration);
-    }
-    private void JumpingUpdate()
-    {
-        if (_jumpEvent)
-        {
-            if (_canJump)
-            {
-                _jumping = true;
-                _desiredVelocity.y = _jumpHeight;
-            }
-            else
-            {
-                _jumpBufferCall = true;
-            }
-
-            _jumpEvent = false;
-        }
-
-        JumpBufferHandle();
-
-        if (_jumping && manager.stateManager.onGround && _desiredVelocity.y <= 0f) _jumping = false;
-
-        if (_jumping && _desiredVelocity.y <= 0)
-        {
-            manager.body.gravityScale = _defaultGravityScale * _dragDownGravityScale;
-        }
-        else
-        {
-            manager.body.gravityScale = _defaultGravityScale;
-        }
-    }
-
-    private void JumpBufferHandle()
-    {
-        if (!_jumpBufferCall) 
-        {
-            _bufferTimer = 0f;
-
-            return;
-        }
-
-        _bufferTimer += Time.deltaTime;
-        if (_bufferTimer > _jumpBufferTime)
-        {
-            _jumpBufferCall = false;
-
-            return;
-        }
-
-        if (_canJump)
-        {
-            _jumping = true;
-            _desiredVelocity.y = _jumpHeight;
-
-            _jumpBufferCall = false;
-        }
     }
 
     private void JumpAvailabilityCheck()
@@ -165,7 +112,36 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
-    private float MovementAcceleration()
+    private void JumpBufferHandle()
+    {
+        if (!_jumpBufferReady) return;
+
+        _bufferTimer += Time.deltaTime;
+        if (_bufferTimer > _jumpBufferTime)
+        {
+            _bufferTimer = 0f;
+            _jumpBufferReady = false;
+
+            return;
+        }
+
+        if (_canJump)
+        {
+            JumpRaw();
+
+            _bufferTimer = 0f;
+            _jumpBufferReady = false;
+        }
+    }
+
+    private void JumpRaw()
+    {
+        AddForce(
+            Vector2.up * (_jumpHeight - manager.body.velocity.y)
+        );
+    }
+
+    private float MovementAccelerationCalculation()
     {
         bool onGround = manager.stateManager.onGround;
         float movementAcceleration = (onGround ? _runningAcceleration : _onAirAcceleration) * _runningSpeed;
@@ -191,6 +167,13 @@ public class PlayerMovementController : MonoBehaviour
 
     private void UpdateBodyVelocity()
     {
+        while (_velocityAddingQueue.Count > 0)
+        {
+            _desiredVelocity += _velocityAddingQueue.Peek();
+
+            _velocityAddingQueue.Dequeue();
+        }
+
         manager.body.velocity = _desiredVelocity;
     }
 }
