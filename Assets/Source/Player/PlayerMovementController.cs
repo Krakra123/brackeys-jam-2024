@@ -35,6 +35,16 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float _jumpBufferTime;
 
+    [Header("Kick")]
+    [SerializeField]
+    private float _kickForce;
+    [SerializeField]
+    private Transform _kickPivot;
+    [SerializeField]
+    private LayerMask _kickableMask;
+    [SerializeField]
+    private float _kickRange;
+
     private bool _canJump;
 
     private float _coyoteTimer;
@@ -67,6 +77,17 @@ public class PlayerMovementController : MonoBehaviour
         if (manager.inputManager.jump && !_canJump)
         {
             _jumpBufferReady = true;
+        }
+
+        if (manager.inputManager.click)
+        {
+            if (Physics2D.Raycast(_kickPivot.position, manager.inputManager.cursorDirection, _kickRange, _kickableMask))
+            {
+                AddForce(
+                    -manager.inputManager.cursorDirection * _kickForce 
+                    // + Vector2.down * manager.body.velocity.y
+                );
+            }
         }
     }
 

@@ -55,8 +55,10 @@ public class PlayerStateManager : MonoBehaviour
             _groundMask
         );
 
-        if (manager.body.velocity.x > 0f) _rightRayCheck = false;
-        if (manager.body.velocity.x < 0f) _leftRayCheck = false;
+        if (manager.body.velocity.x < -1f) _leftRayCheck = false;
+        if (manager.body.velocity.x >  1f) _rightRayCheck = false;
+
+        // Debug.Log($"{_leftRayCheck} = {_centerRayCheck} = {_rightRayCheck}");
 
         _onGround = _leftRayCheck || _centerRayCheck || _rightRayCheck;
     }
