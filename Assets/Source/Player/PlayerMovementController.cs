@@ -25,6 +25,8 @@ public class PlayerMovementController : MonoBehaviour
     [Range(.1f, 10f)] [SerializeField]
     private float _onAirAcceleration;
     [Range(.1f, 10f)] [SerializeField]
+    private float _onAirDeceleration;
+    [Range(.1f, 10f)] [SerializeField]
     private float _onAirControl;
 
     [Header("Helper")]
@@ -37,7 +39,8 @@ public class PlayerMovementController : MonoBehaviour
     private bool _canJump;
 
     private float _coyoteTimer;
-    private float _buferTimer;
+    private float _bufferTimer;
+    private bool _jumpBufferCall = false;
 
     private Vector2 _desiredVelocity;
 
@@ -59,7 +62,7 @@ public class PlayerMovementController : MonoBehaviour
 
     public void DelegateUpdate()
     {
-        if (_canJump && manager.inputManager.jump)
+        if (manager.inputManager.jump)
         {
             _jumpEvent = true;
         }
@@ -88,11 +91,20 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (_jumpEvent)
         {
-            _jumping = true;
-            _desiredVelocity.y = _jumpHeight;
+            if (_canJump)
+            {
+                _jumping = true;
+                _desiredVelocity.y = _jumpHeight;
+            }
+            else
+            {
+                _jumpBufferCall = true;
+            }
 
             _jumpEvent = false;
         }
+
+        JumpBufferHandle();
 
         if (_jumping && manager.stateManager.onGround && _desiredVelocity.y <= 0f) _jumping = false;
 
@@ -103,6 +115,32 @@ public class PlayerMovementController : MonoBehaviour
         else
         {
             manager.body.gravityScale = _defaultGravityScale;
+        }
+    }
+
+    private void JumpBufferHandle()
+    {
+        if (!_jumpBufferCall) 
+        {
+            _bufferTimer = 0f;
+
+            return;
+        }
+
+        _bufferTimer += Time.deltaTime;
+        if (_bufferTimer > _jumpBufferTime)
+        {
+            _jumpBufferCall = false;
+
+            return;
+        }
+
+        if (_canJump)
+        {
+            _jumping = true;
+            _desiredVelocity.y = _jumpHeight;
+
+            _jumpBufferCall = false;
         }
     }
 
@@ -131,7 +169,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         bool onGround = manager.stateManager.onGround;
         float movementAcceleration = (onGround ? _runningAcceleration : _onAirAcceleration) * _runningSpeed;
-        float movementDeceleration = (onGround ? _runningDeceleration : _onAirControl) * _runningSpeed;
+        float movementDeceleration = (onGround ? _runningDeceleration : _onAirDeceleration) * _runningSpeed;
         float movementTurnSpeed = (onGround ? _runningTurnAcceleration : _onAirControl) * 2f * _runningSpeed;
 
         if (manager.inputManager.horizontalDirection != 0)
