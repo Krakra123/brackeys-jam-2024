@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8b9d8b08091500d4e9c026cc401fbb7f
+guid: 34d967f0df0217b4c82ae49cda436b80
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: glitter_0
+      name: kick_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 9
-        height: 13
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fcb5090f8b147a4a9f8df3ceaf77a06
-      internalID: 886289365
+      spriteID: 659540bd776bde64aa52f1386f5897a2
+      internalID: 180384325
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: glitter_1
+      name: kick_1
       rect:
         serializedVersion: 2
-        x: 9
+        x: 48
         y: 0
-        width: 9
-        height: 13
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9be24f0cb0dc954cb7d1eafab6551a8
-      internalID: -1638572282
+      spriteID: 8e2827d145addf1489ce342414e732a0
+      internalID: 464552357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: glitter_2
+      name: kick_2
       rect:
         serializedVersion: 2
-        x: 18
+        x: 96
         y: 0
-        width: 9
-        height: 13
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 622a810b880fe804cb86d2a3f25cd5c3
-      internalID: 477368645
+      spriteID: cb1cc5506e7f79545a11682baf5c7d2c
+      internalID: 801869665
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: glitter_3
+      name: kick_3
       rect:
         serializedVersion: 2
-        x: 27
+        x: 144
         y: 0
-        width: 9
-        height: 13
+        width: 48
+        height: 48
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,8 +187,29 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cbd3b76e9ce7f2a45a34fd8b36b51240
-      internalID: 802821943
+      spriteID: ff0a26506435041409f7ac6e23da1960
+      internalID: 1781573535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: kick_4
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 48
+        height: 48
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7c10387d8738883478228e2b9bf638ca
+      internalID: -1606741703
       vertices: []
       indices: 
       edges: []
@@ -204,10 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      glitter_0: 886289365
-      glitter_1: -1638572282
-      glitter_2: 477368645
-      glitter_3: 802821943
+      kick_0: 180384325
+      kick_1: 464552357
+      kick_2: 801869665
+      kick_3: 1781573535
+      kick_4: -1606741703
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
