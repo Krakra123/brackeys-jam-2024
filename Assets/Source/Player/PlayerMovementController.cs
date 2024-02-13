@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMovementController : MonoBehaviour
@@ -35,7 +34,19 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float _jumpBufferTime;
 
+    [Header("Kick")]
+    [SerializeField]
+    private float _kickForce;
+    [SerializeField]
+    private Transform _kickPivot;
+    [SerializeField]
+    private LayerMask _kickableMask;
+    [SerializeField]
+    private float _kickRange;
+
     private bool _canJump;
+
+    private int _movingDirection;
 
     private float _coyoteTimer;
     private float _bufferTimer;
@@ -68,6 +79,17 @@ public class PlayerMovementController : MonoBehaviour
         {
             _jumpBufferReady = true;
         }
+
+        if (manager.inputManager.click)
+        {
+            if (Physics2D.Raycast(_kickPivot.position, manager.inputManager.cursorDirection, _kickRange, _kickableMask))
+            {
+                AddForce(
+                    -manager.inputManager.cursorDirection * _kickForce 
+                    + Vector2.down * manager.body.velocity.y
+                );
+            }
+        }
     }
 
     public void DelegateFixedUpdate()
@@ -89,6 +111,8 @@ public class PlayerMovementController : MonoBehaviour
 
         float acceleration = MovementAccelerationCalculation();
         _desiredVelocity.x = Mathf.MoveTowards(_desiredVelocity.x, rawHorizontalVelocity, acceleration);
+
+        if (_desiredVelocity.x != 0) _movingDirection = (int)Mathf.Sign(_desiredVelocity.x);
     }
 
     private void JumpAvailabilityCheck()
@@ -110,6 +134,8 @@ public class PlayerMovementController : MonoBehaviour
         {
             _canJump = true;
         }
+
+        if (manager.stateManager.climbing) _canJump = true;
     }
 
     private void JumpBufferHandle()
@@ -136,9 +162,20 @@ public class PlayerMovementController : MonoBehaviour
 
     private void JumpRaw()
     {
-        AddForce(
-            Vector2.up * (_jumpHeight - manager.body.velocity.y)
-        );
+        if (!manager.stateManager.climbing)
+        {
+            AddForce(
+                Vector2.up * _jumpHeight
+                + Vector2.down * manager.body.velocity.y
+            );
+        }
+        else
+        {
+            AddForce(
+                (Vector2.right * -_movingDirection + Vector2.up) * _jumpHeight
+                + Vector2.down * manager.body.velocity.y
+            );
+        }
     }
 
     private float MovementAccelerationCalculation()

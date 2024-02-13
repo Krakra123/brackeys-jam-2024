@@ -12,6 +12,12 @@ public class PlayerInputManager : MonoBehaviour
     private bool _jump;
     public bool jump { get => _jump; }
 
+    private bool _click;
+    public bool click { get => _click; }
+
+    private Vector2 _cursorDirection;
+    public Vector2 cursorDirection { get => _cursorDirection; }
+
     public void DelegateStart()
     {
 
@@ -21,6 +27,7 @@ public class PlayerInputManager : MonoBehaviour
     {
         _horizontalDirection = 0;
         _jump = false;
+        _click = false;
 
         if (Input.GetButton("Right"))
         {
@@ -39,6 +46,14 @@ public class PlayerInputManager : MonoBehaviour
         {
             _jump = true;
         }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            _click = true;
+        }
+
+        _cursorDirection = Camera.main.ScreenToWorldPoint(Input.mousePosition) - manager.transform.position;
+        _cursorDirection = _cursorDirection.normalized;
     }
 
     public void DelegateFixedUpdate()
