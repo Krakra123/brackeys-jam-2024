@@ -288,21 +288,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _runningSpeed: 15
   _runningAcceleration: 1
-  _runningDeceleration: 5
+  _runningDeceleration: 2
   _runningTurnAcceleration: 4
   _jumpHeight: 15
   _dragDownGravityScale: 1.5
   _onAirAcceleration: 0.8
-  _onAirDeceleration: 0
-  _onAirControl: 6
+  _onAirDeceleration: 2
+  _onAirControl: 3
   _coyoteTime: 0.07
   _jumpBufferTime: 0.14
-  _kickForce: 30
+  _kickForce: 25
   _kickPivot: {fileID: 975797074}
   _kickableMask:
     serializedVersion: 2
     m_Bits: 1
-  _kickRange: 0.8
+  _kickRange: 1
 --- !u!114 &180939829
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -333,6 +333,8 @@ MonoBehaviour:
   _groundCheckCenter: {fileID: 1978146805}
   _groundCheckRadius: 0.5
   _groundCheckRayLength: 0.1
+  _climbCheckRadius: 0.9
+  _climbCheckRayLength: 0.6
 --- !u!114 &180939831
 MonoBehaviour:
   m_ObjectHideFlags: 0
