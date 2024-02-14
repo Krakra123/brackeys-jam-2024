@@ -214,6 +214,27 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: spike_turtle_5
+      rect:
+        serializedVersion: 2
+        x: 130
+        y: 0
+        width: 26
+        height: 20
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2e523be259d6274abe62b743228d2ab
+      internalID: 801813013
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -230,6 +251,7 @@ TextureImporter:
       spike_turtle_2: 34688425
       spike_turtle_3: -82292968
       spike_turtle_4: 881020001
+      spike_turtle_5: 801813013
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

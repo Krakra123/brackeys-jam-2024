@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 8b9d8b08091500d4e9c026cc401fbb7f
+guid: 12f6dbc37ec241146bc827d9169e47d4
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 16
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: glitter_0
+      name: fall_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 9
-        height: 13
+        width: 47
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6fcb5090f8b147a4a9f8df3ceaf77a06
-      internalID: 886289365
+      spriteID: 637778b04b55d7849ba683bddbda94c5
+      internalID: 939659970
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: glitter_1
+      name: fall_1
       rect:
         serializedVersion: 2
-        x: 9
+        x: 47
         y: 0
-        width: 9
-        height: 13
+        width: 47
+        height: 47
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,50 +145,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c9be24f0cb0dc954cb7d1eafab6551a8
-      internalID: -1638572282
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: glitter_2
-      rect:
-        serializedVersion: 2
-        x: 18
-        y: 0
-        width: 9
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 622a810b880fe804cb86d2a3f25cd5c3
-      internalID: 477368645
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: glitter_3
-      rect:
-        serializedVersion: 2
-        x: 27
-        y: 0
-        width: 9
-        height: 13
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: cbd3b76e9ce7f2a45a34fd8b36b51240
-      internalID: 802821943
+      spriteID: 7f1de14c17b023e45a1528edc470ef87
+      internalID: 2100742247
       vertices: []
       indices: 
       edges: []
@@ -204,10 +162,8 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      glitter_0: 886289365
-      glitter_1: -1638572282
-      glitter_2: 477368645
-      glitter_3: 802821943
+      fall_0: 939659970
+      fall_1: 2100742247
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
