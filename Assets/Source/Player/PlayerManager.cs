@@ -6,32 +6,35 @@ public class PlayerManager : MonoBehaviour
 {   
     public Rigidbody2D body;
 
-    public PlayerStateManager stateManager;
     public PlayerInputManager inputManager;
+    public PlayerMotionManager motionManager;
     public PlayerMovementController movementController;
 
     private void Start()
     {
-        stateManager.manager = this;
         inputManager.manager = this;
+        motionManager.manager = this;
         movementController.manager = this;
 
-        stateManager.DelegateStart();
         inputManager.DelegateStart();
+        
         movementController.DelegateStart();
+        motionManager.DelegateStart();
     }
 
     private void Update()
     {
-        stateManager.DelegateUpdate();
         inputManager.DelegateUpdate();
+
         movementController.DelegateUpdate();
+        motionManager.DelegateUpdate();
     }
 
     private void FixedUpdate()
     {
-        stateManager.DelegateFixedUpdate();
         inputManager.DelegateFixedUpdate();
+
         movementController.DelegateFixedUpdate();
+        motionManager.DelegateFixedUpdate();
     }
 }
