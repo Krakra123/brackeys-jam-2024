@@ -236,7 +236,21 @@ public class PlayerMovementController : MonoBehaviour
     private void RunningHandle()
     {
         if (_kicking) return;
-        if (manager.inputManager.horizontalDirection == 0) return; 
+
+        if (manager.inputManager.horizontalDirection == 0) 
+        {
+            if (_onGround)
+            {
+                manager.body.drag = 6f;
+            }
+
+            return;
+        }
+        else 
+        {
+            if (manager.body.drag == 6f) 
+                manager.body.drag = 2f;
+        }
 
         if (_canMove) 
         {
@@ -256,7 +270,7 @@ public class PlayerMovementController : MonoBehaviour
             if (manager.inputManager.click)
             {
                 manager.body.velocity = Vector2.zero;
-                _motion.SetActiveDrag(false);
+                manager.body.drag = 0f;
                 _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _kickVelocity);
                 _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
                 _kicking = true;
@@ -268,7 +282,7 @@ public class PlayerMovementController : MonoBehaviour
         {
             if (!_lockKicking && (_climbing || _onGround))
             {
-                _motion.SetActiveDrag(true);
+                manager.body.drag = 2f;
                 _kicking = false;
             }
         }
