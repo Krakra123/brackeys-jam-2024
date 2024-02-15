@@ -21,6 +21,8 @@ public class PlayerMovementController : MonoBehaviour
 
     [Header("Climb Check")]
     [SerializeField]
+    private Transform _climbCheckCenter;
+    [SerializeField]
     private float _climbCheckRadius;
     [SerializeField]
     private float _climbCheckRayLength;
@@ -56,6 +58,11 @@ public class PlayerMovementController : MonoBehaviour
 
     private int _facingDirection;
 
+    private float _kickVelocity;
+    public float kickVelocity { get => _kickVelocity; }
+
+    private float _storeVelocity;
+
     public void DelegateStart()
     {
         _motion = manager.motionManager;
@@ -77,11 +84,11 @@ public class PlayerMovementController : MonoBehaviour
 
         GravityHandle();
 
+        KickHandle();
+
         JumpAvailabilityCheck();
         JumpingHandle();
         JumpBufferHandle();
-
-        KickHandle();
     }
 
     public void DelegateFixedUpdate()
@@ -128,19 +135,19 @@ public class PlayerMovementController : MonoBehaviour
     private void ClimbingCheckHandle()
     {
         bool topRayCheck = Physics2D.Raycast(
-            manager.transform.position + Vector3.up * _climbCheckRadius,
+            _climbCheckCenter.position + Vector3.up * _climbCheckRadius,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
         );
         bool centerRayCheck = Physics2D.Raycast(
-            manager.transform.position,
+            _climbCheckCenter.position,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
         );
         bool botRayCheck = Physics2D.Raycast(
-            manager.transform.position + Vector3.down * _climbCheckRadius,
+            _climbCheckCenter.position + Vector3.down * _climbCheckRadius,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
@@ -242,14 +249,15 @@ public class PlayerMovementController : MonoBehaviour
 
     private void KickHandle()
     {
+        _kickVelocity = Mathf.Lerp(_kickVelocity, _motion.currentVelocityMagnitude, .01f);
+
         if (!_kicking)
         {
             if (manager.inputManager.click)
             {
-                float _magnitude = _motion.currentVelocityMagnitude;
                 manager.body.velocity = Vector2.zero;
                 _motion.SetActiveDrag(false);
-                _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _magnitude);
+                _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _kickVelocity);
                 _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
                 _kicking = true;
 
