@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 1393441204298206828}
   m_Layer: 0
   m_Name: Bee
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -84,6 +84,7 @@ MonoBehaviour:
   Flip: 0
   Death: 0
   DeathEffect: {fileID: 3889054384894591629, guid: 22eae5b624ebc6247ac6e7f06685597d, type: 3}
+  StarEffect: {fileID: 7185480688554468639, guid: a6e1a07d02620f14fb54175e361ed5a5, type: 3}
   StartPoint: {fileID: 6620496039571247560}
   EndPoint: {fileID: 3565372099058184446}
   fly: 1

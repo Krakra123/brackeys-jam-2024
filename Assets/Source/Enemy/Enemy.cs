@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     public bool Flip = false;
     public bool Death = false; 
     public GameObject DeathEffect;
+    public GameObject StarEffect;
     protected bool Hurt = false;
     private bool FLIP = false;
     protected Vector2 SpawnPosition;
@@ -42,10 +43,14 @@ public class Enemy : MonoBehaviour
 
     public void Kill()
     {
-        Instantiate(DeathEffect, transform.position, Quaternion.identity);
-        Sprite.SetActive(false);
-        //gameObject.SetActive(false);
-        Death = true;
+        if (Death == false)
+        {
+            Instantiate(StarEffect, transform.position, Quaternion.identity);
+            Instantiate(DeathEffect, transform.position, Quaternion.identity);
+            Sprite.SetActive(false);
+            gameObject.SetActive(false);
+            Death = true;
+        }
     }
 
     public void Reset()
@@ -54,7 +59,7 @@ public class Enemy : MonoBehaviour
         Hurt = false;
         Flip = FLIP;
         Sprite.SetActive(true);
-        //gameObject.SetActive(true);
+        gameObject.SetActive(true);
         Death = false;
     }
 

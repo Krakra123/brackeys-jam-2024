@@ -74,12 +74,18 @@ public class Turtle : Enemy
 
     bool checkImpact()
     {
-        RaycastHit2D RightHit = Physics2D.Raycast(new Vector2(0.8f,-0.5f) + Position(), Vector2.right, 0.25f);
-        RaycastHit2D LefttHit = Physics2D.Raycast(new Vector2(-0.8f, -0.5f) + Position(), Vector2.left, 0.25f);
+        RaycastHit2D ImpactHit = Physics2D.Raycast(new Vector2(0.8f * base.direction.x,-0.5f) + Position(), Vector2.right, 0.25f);
         bool touch = false;
-        if (RightHit.collider != null || LefttHit.collider != null)
+        if (ImpactHit.collider != null)
         {
-            touch = true;
+            if (ImpactHit.collider.gameObject.tag == "Enemy")
+            {
+                ImpactHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+            }
+            else
+            {
+                touch = true;
+            }
         }
         return touch;
     }

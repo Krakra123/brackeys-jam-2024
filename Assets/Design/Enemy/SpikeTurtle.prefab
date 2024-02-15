@@ -11,10 +11,11 @@ GameObject:
   - component: {fileID: 4235590945545408130}
   - component: {fileID: 5468191635353283411}
   - component: {fileID: 3063342939090641831}
+  - component: {fileID: 299973777173566756}
   - component: {fileID: 2131390718117832722}
   m_Layer: 0
   m_Name: SpikeTurtle
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -52,6 +53,7 @@ MonoBehaviour:
   Flip: 0
   Death: 0
   DeathEffect: {fileID: 2947842695746880182, guid: fea98ace169c63b42bd5009861fd9fee, type: 3}
+  StarEffect: {fileID: 7185480688554468639, guid: a6e1a07d02620f14fb54175e361ed5a5, type: 3}
   Raycheck: {fileID: 5744431023567469141}
 --- !u!50 &3063342939090641831
 Rigidbody2D:
@@ -80,6 +82,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 4
+--- !u!114 &299973777173566756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1802646384444003523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1a18d67d1fe4645b029b9e6738cd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 5468191635353283411}
 --- !u!61 &2131390718117832722
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -89,7 +104,7 @@ BoxCollider2D:
   m_GameObject: {fileID: 1802646384444003523}
   m_Enabled: 1
   m_Density: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: 7eea4ed12811b264fa63f01289cbc63b, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
