@@ -21,6 +21,8 @@ public class PlayerMovementController : MonoBehaviour
 
     [Header("Climb Check")]
     [SerializeField]
+    private Transform _climbCheckCenter;
+    [SerializeField]
     private float _climbCheckRadius;
     [SerializeField]
     private float _climbCheckRayLength;
@@ -38,8 +40,11 @@ public class PlayerMovementController : MonoBehaviour
     private float _coyoteTime;
     [SerializeField]
     private float _jumpBufferTime;
+
+    [Header("Kicking")]
     [SerializeField]
-    private float _wallJumpUncontrolTime;
+    private float _lockKickingTime;
+
     private float _coyoteTimer = 0f;
     private float _bufferTimer = 0f;
     private bool _jumpBufferReady = false;
@@ -48,8 +53,15 @@ public class PlayerMovementController : MonoBehaviour
     private bool _climbing;
     private bool _canMove;
     private bool _canJump;
+    private bool _kicking;
+    private bool _lockKicking;
 
     private int _facingDirection;
+
+    private float _kickVelocity;
+    public float kickVelocity { get => _kickVelocity; }
+
+    private float _storeVelocity;
 
     public void DelegateStart()
     {
@@ -61,19 +73,22 @@ public class PlayerMovementController : MonoBehaviour
 
     public void DelegateUpdate()
     {
-        if (manager.inputManager.horizontalDirection != 0) _facingDirection = manager.inputManager.horizontalDirection;
+        if (!_kicking)
+        {
+            if (manager.inputManager.horizontalDirection != 0) 
+                _facingDirection = manager.inputManager.horizontalDirection;
+        }
 
         GroundCheckHandle();
         ClimbingCheckHandle();
 
+        GravityHandle();
+
+        KickHandle();
+
         JumpAvailabilityCheck();
         JumpingHandle();
         JumpBufferHandle();
-
-        if (manager.inputManager.click)
-        {
-            _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _motion.currentVelocityMagnitude);
-        }
     }
 
     public void DelegateFixedUpdate()
@@ -120,19 +135,19 @@ public class PlayerMovementController : MonoBehaviour
     private void ClimbingCheckHandle()
     {
         bool topRayCheck = Physics2D.Raycast(
-            manager.transform.position + Vector3.up * _climbCheckRadius,
+            _climbCheckCenter.position + Vector3.up * _climbCheckRadius,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
         );
         bool centerRayCheck = Physics2D.Raycast(
-            manager.transform.position,
+            _climbCheckCenter.position,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
         );
         bool botRayCheck = Physics2D.Raycast(
-            manager.transform.position + Vector3.down * _climbCheckRadius,
+            _climbCheckCenter.position + Vector3.down * _climbCheckRadius,
             Vector2.right * _facingDirection,
             _climbCheckRayLength,
             _groundMask
@@ -143,6 +158,8 @@ public class PlayerMovementController : MonoBehaviour
 
     private void JumpingHandle()
     {
+        if (_kicking) return;
+
         if (manager.inputManager.jump && _canJump)
         {
             JumpRaw();
@@ -213,21 +230,12 @@ public class PlayerMovementController : MonoBehaviour
                 (Vector2.right * -_facingDirection + Vector2.up * 2).normalized * _jumpHeight
                 + Vector2.down * manager.body.velocity.y
             );
-
-            StartCoroutine(WallJumpHelper());
         }
-    }
-    private IEnumerator WallJumpHelper()
-    {
-        _canMove = false;
-
-        yield return new WaitForSeconds(_wallJumpUncontrolTime);
-
-        _canMove = true;
     }
 
     private void RunningHandle()
     {
+        if (_kicking) return;
         if (manager.inputManager.horizontalDirection == 0) return; 
 
         if (_canMove) 
@@ -236,6 +244,58 @@ public class PlayerMovementController : MonoBehaviour
                 manager.inputManager.horizontalDirection * _runningSpeed,
                 0f
             ));
+        }
+    }
+
+    private void KickHandle()
+    {
+        _kickVelocity = Mathf.Lerp(_kickVelocity, _motion.currentVelocityMagnitude, .01f);
+
+        if (!_kicking)
+        {
+            if (manager.inputManager.click)
+            {
+                manager.body.velocity = Vector2.zero;
+                _motion.SetActiveDrag(false);
+                _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _kickVelocity);
+                _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
+                _kicking = true;
+
+                StartCoroutine(LockKickingMovement());
+            }
+        }
+        else 
+        {
+            if (!_lockKicking && (_climbing || _onGround))
+            {
+                _motion.SetActiveDrag(true);
+                _kicking = false;
+            }
+        }
+    }
+    private IEnumerator LockKickingMovement()
+    {
+        _lockKicking = true;
+
+        yield return new WaitForSeconds(_lockKickingTime);
+
+        _lockKicking = false;
+    }
+
+    private void GravityHandle()
+    {
+        if (!_kicking)
+        {
+            if (_climbing) 
+            {
+                if (manager.body.velocity.y < 0f) manager.body.gravityScale = 1f;
+                else manager.body.gravityScale = 8f;
+            }
+            else manager.body.gravityScale = 8f;
+        }
+        else
+        {
+            manager.body.gravityScale = .3f;
         }
     }
 }
