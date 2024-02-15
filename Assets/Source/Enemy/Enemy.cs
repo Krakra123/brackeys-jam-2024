@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void reset()
     {
         transform.position = SpawnPosition;
         Hurt = false;

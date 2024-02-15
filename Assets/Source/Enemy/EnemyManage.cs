@@ -16,8 +16,8 @@ public class EnemyManage : MonoBehaviour
         enemy.Kill();
     }
 
-    public void Reset()
+    public void reset()
     {
-        enemy.Reset();
+        enemy.reset();
     }
 }

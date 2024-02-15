@@ -15,7 +15,7 @@ public class TestEnemy : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.R))
         {
-            Enemy.Reset();
+            Enemy.reset();
         }
 
         if (Input.GetKeyDown(KeyCode.J))
