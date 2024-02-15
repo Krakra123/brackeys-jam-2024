@@ -44,6 +44,10 @@ public class PlayerMovementController : MonoBehaviour
     [Header("Kicking")]
     [SerializeField]
     private float _lockKickingTime;
+    [SerializeField]
+    private float _kickDelay;
+    [SerializeField]
+    private float _kickCounterDelay;
 
     private float _coyoteTimer = 0f;
     private float _bufferTimer = 0f;
@@ -122,12 +126,19 @@ public class PlayerMovementController : MonoBehaviour
             _groundCheckRadius + _groundCheckRayLength,
             _groundMask
         );
+        bool backCounterRayCheck = Physics2D.Raycast(
+            _groundCheckCenter.position,
+            Vector2.right * _facingDirection,
+            _groundCheckRayLength,
+            _groundMask
+        );
 
         if (counterRayCheck)
         {
             if (_facingDirection < 0) leftRayCheck = false;
             if (_facingDirection > 0) rightRayCheck = false;
         }
+        if (backCounterRayCheck) centerRayCheck = false;
 
         _onGround = leftRayCheck || centerRayCheck || rightRayCheck;
     }
@@ -226,10 +237,12 @@ public class PlayerMovementController : MonoBehaviour
         }
         else
         {
+            manager.body.velocity = Vector2.zero;
             _motion.AddBonusVelocity(
-                (Vector2.right * -_facingDirection + Vector2.up * 2).normalized * _jumpHeight
+                (Vector2.right * -_facingDirection + Vector2.up * 2f).normalized * Mathf.Max(_kickVelocity * 1.2f, _jumpHeight)
                 + Vector2.down * manager.body.velocity.y
             );
+            _facingDirection *= -1;
         }
     }
 
@@ -241,7 +254,12 @@ public class PlayerMovementController : MonoBehaviour
         {
             if (_onGround)
             {
-                manager.body.drag = 6f;
+                if (manager.body.drag == 2f) 
+                    manager.body.drag = 6f;
+            }
+            else 
+            {
+                manager.body.drag = 2f;
             }
 
             return;
@@ -269,13 +287,8 @@ public class PlayerMovementController : MonoBehaviour
         {
             if (manager.inputManager.click)
             {
-                manager.body.velocity = Vector2.zero;
-                manager.body.drag = 0f;
-                _motion.AddBonusVelocity(manager.inputManager.cursorDirection * _kickVelocity);
-                _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
-                _kicking = true;
-
-                StartCoroutine(LockKickingMovement());
+                StartCoroutine(KickCoroutine());
+                
             }
         }
         else 
@@ -286,6 +299,29 @@ public class PlayerMovementController : MonoBehaviour
                 _kicking = false;
             }
         }
+    }
+    private IEnumerator KickCoroutine()
+    {
+        _kicking = true;
+        manager.body.velocity = Vector2.zero;
+        Vector2 velocity = manager.inputManager.cursorDirection * _kickVelocity * 1.2f;
+
+        yield return new WaitForSeconds(_kickDelay);
+
+        StartCoroutine(KickRaw(velocity));
+    }
+    private IEnumerator KickRaw(Vector2 velocity)
+    {
+        _kicking = true;
+        manager.body.velocity = Vector2.zero;
+        manager.body.drag = 0f;
+        _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
+
+        _motion.AddBonusVelocity(velocity*2f);
+        yield return new WaitForSeconds(_kickCounterDelay);
+        _motion.AddBonusVelocity(-velocity);
+
+        StartCoroutine(LockKickingMovement());
     }
     private IEnumerator LockKickingMovement()
     {
@@ -309,7 +345,7 @@ public class PlayerMovementController : MonoBehaviour
         }
         else
         {
-            manager.body.gravityScale = .3f;
+            manager.body.gravityScale = 0f;
         }
     }
 }
