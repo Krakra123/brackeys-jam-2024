@@ -436,7 +436,7 @@ MonoBehaviour:
   _climbCheckCenter: {fileID: 192875705}
   _climbCheckRadius: 0.9
   _climbCheckRayLength: 0.6
-  _runningSpeed: 1
+  _runningSpeed: 0.9
   _jumpHeight: 30
   _coyoteTime: 0.08
   _jumpBufferTime: 0.12
@@ -453,7 +453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d4a913f4bc89dc24abaf912f2bce7863, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _drag: 2
 --- !u!1 &192875704
 GameObject:
   m_ObjectHideFlags: 0
