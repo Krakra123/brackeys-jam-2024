@@ -43,6 +43,7 @@ GameObject:
   - component: {fileID: 8655379790383796005}
   - component: {fileID: 519541657637269064}
   - component: {fileID: 1393441204298206828}
+  - component: {fileID: 4578811291874070207}
   m_Layer: 0
   m_Name: Bee
   m_TagString: Enemy
@@ -144,7 +145,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: -0.04904139, y: 0.01634729}
@@ -160,6 +161,19 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.307327, y: 1.5034931}
   m_EdgeRadius: 0
+--- !u!114 &4578811291874070207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2213765348276501024}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e1a18d67d1fe4645b029b9e6738cd46, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 8655379790383796005}
 --- !u!1 &3828841401448328585
 GameObject:
   m_ObjectHideFlags: 0

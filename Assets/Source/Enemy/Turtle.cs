@@ -9,6 +9,8 @@ public class Turtle : Enemy
     private bool Spinning = false;
     [SerializeField]
     private Transform Raycheck;
+    private float Gravity = 0;
+    private bool fall = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,10 +39,17 @@ public class Turtle : Enemy
         {
             if(checkImpact() && Death == false)
             {
-                base.Kill();
                 Spinning = false;
+                base.Kill();
             }
-            Body.velocity = SpeedSpin * base.direction;
+            if(IsGrounded() == false)
+            {
+                fall = true;
+                Gravity += 1f;
+                Gravity = Mathf.Clamp(Gravity, 0, 30);
+            }
+            EnemiesCollide();
+            Body.velocity = SpeedSpin * base.direction + new Vector2(0,-Gravity);
         }
 
         if (Death)
@@ -65,8 +74,12 @@ public class Turtle : Enemy
     {
         RaycastHit2D GroundHit = Physics2D.Raycast(Raycheck.position,  Vector2.down, 0.25f);
         bool touch = false;
-        if (GroundHit.collider != null)
+        if (GroundHit.collider != null )
         {
+            if (GroundHit.collider.gameObject.tag == "Enemy")
+            {
+                GroundHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+            }
             touch = true;
         }
         return touch;
@@ -74,18 +87,51 @@ public class Turtle : Enemy
 
     bool checkImpact()
     {
-        RaycastHit2D ImpactHit = Physics2D.Raycast(new Vector2(0.8f * base.direction.x,-0.5f) + Position(), Vector2.right, 0.25f);
+        RaycastHit2D ImpactHit = Physics2D.Raycast(new Vector2(1.6f * base.direction.x,0.15f) + Position(), Vector2.down, 0.7f);
+
         bool touch = false;
         if (ImpactHit.collider != null)
         {
             if (ImpactHit.collider.gameObject.tag == "Enemy")
             {
-                ImpactHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                if (fall == false)
+                {
+                    ImpactHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                }
             }
             else
             {
                 touch = true;
             }
+        }
+        return touch;
+    }
+
+    void EnemiesCollide()
+    {
+        RaycastHit2D RayHit = Physics2D.BoxCast(new Vector2(transform.position.x, transform.position.y), new Vector2(1.5f, 1.5f),0f,Vector2.down);
+        if (RayHit.collider != null)
+        {
+            if (RayHit.collider.gameObject.tag == "Enemy" && RayHit.collider.gameObject != gameObject)
+            {
+                Debug.Log(RayHit.collider.gameObject.name);
+                RayHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                if (fall == true)
+                {
+                    Kill();
+                }
+            }
+        }
+    }
+    bool IsGrounded()
+    {
+        Transform CheckGround = transform.Find("CheckGround").gameObject.transform;
+        RaycastHit2D RayHit = Physics2D.Raycast(CheckGround.position, Vector2.right, 1f);
+        Debug.DrawRay(CheckGround.position, new Vector2(1, 0), Color.blue);
+        bool touch = false;
+        if (RayHit.collider != null)
+        {
+            touch = true;
         }
         return touch;
     }
