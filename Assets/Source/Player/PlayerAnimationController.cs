@@ -20,7 +20,7 @@ public class PlayerAnimationController : MonoBehaviour
     private float _facing;
     private bool _brake;
 
-    public string currentAnimation;
+    public string currentAnimation { get; private set; }
 
     public void DelegateStart()
     {
