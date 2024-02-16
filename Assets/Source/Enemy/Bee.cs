@@ -15,8 +15,10 @@ public class Bee : Enemy
 
     public bool fly = true;
 
-    void Start()
+    protected override void Start()
     {
+        base.Start();
+
         Body = GetComponent<Rigidbody2D>();
         StartPosition = StartPoint.position;
         EndPosition = EndPoint.position;
@@ -28,25 +30,25 @@ public class Bee : Enemy
     {
         if (Hurt && Death == false)
         {
-            base.Kill();
+            Kill();
         }
         if (fly && Death == false)
         {
-            float distance = Vector3.Distance(base.Position(), Target);
-            base.AutoFlip();
+            float distance = Vector3.Distance(Position(), Target);
+            AutoFlip();
             if (distance < 0.2)
             {
                 ChangeTarget();
             }
-            base.direction = TargetToDirection();
-            Body.velocity = Speed * base.direction;
+            direction = TargetToDirection();
+            Body.velocity = Speed * direction;
         }
 
     }
 
     Vector2 TargetToDirection()
     {
-        Vector2 _direction = Target - base.Position();
+        Vector2 _direction = Target - Position();
         _direction = _direction.normalized;
         return _direction;
     }

@@ -155,7 +155,6 @@ MonoBehaviour:
   Offset: {x: 0, y: 0}
   followPlayer: 1
   smoothness: 0.5
-  Player: {fileID: 0}
 --- !u!4 &1363701904
 Transform:
   m_ObjectHideFlags: 0
@@ -185,7 +184,7 @@ GameObject:
   - component: {fileID: 1729754369}
   m_Layer: 0
   m_Name: Camera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

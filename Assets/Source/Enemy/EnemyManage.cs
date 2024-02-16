@@ -6,18 +6,18 @@ public class EnemyManage : MonoBehaviour
 {
     [SerializeField] private Enemy enemy;
 
-    public void kick(Vector2 KickDirection)
+    public void Kick(Vector2 KickDirection)
     {
         enemy.Kick(KickDirection);
     }
 
-    public void kill()
+    public void Kill()
     {
         enemy.Kill();
     }
 
-    public void reset()
+    public void Reset()
     {
-        enemy.reset();
+        enemy.Reset();
     }
 }

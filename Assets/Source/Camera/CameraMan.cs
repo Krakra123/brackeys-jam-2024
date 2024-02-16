@@ -8,8 +8,7 @@ public class CameraMan : MonoBehaviour
     public bool followPlayer = true;
     [SerializeField]
     private float smoothness = 0.5f;
-    private GameObject Camera;
-    public GameObject Player;
+    private GameObject Player;
     private float ShakePowter;
     private float TimeShake;
     private bool _shake;
@@ -21,7 +20,7 @@ public class CameraMan : MonoBehaviour
 
     private void Start()
     {
-        Camera = transform.Find("Camera").gameObject;
+        Player = GameManager.Instance.playerManager.gameObject;
     }
     void Update()
     {
@@ -39,7 +38,7 @@ public class CameraMan : MonoBehaviour
     {
         Vector2 _offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * ShakePowter;
         Vector2 _pos = _offset * Mathf.Pow(TimeShake / TIME_SHAKE,2) + new Vector2(transform.position.x, transform.position.y);
-        Camera.transform.position = new Vector3(_pos.x, _pos.y,-10);
+        Camera.main.transform.position = new Vector3(_pos.x, _pos.y,-10);
     }
 
     private void Timer()
@@ -68,7 +67,7 @@ public class CameraMan : MonoBehaviour
         }
         else
         {
-            Camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
     }
 
