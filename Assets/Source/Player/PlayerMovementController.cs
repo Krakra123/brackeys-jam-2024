@@ -19,17 +19,13 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float _groundCheckRayLength;
 
-    [Header("Climb Check")]
-    [SerializeField]
-    private Transform _climbCheckCenter;
-    [SerializeField]
-    private float _climbCheckRadius;
-    [SerializeField]
-    private float _climbCheckRayLength;
-
     [Header("Running")]
     [SerializeField]
     private float _runningSpeed;
+    // [SerializeField]
+    private float _speedBoost;
+    [SerializeField]
+    private float _speedBoostExpire;
 
     [Header("Jumping")]
     [SerializeField]
@@ -42,32 +38,34 @@ public class PlayerMovementController : MonoBehaviour
     private float _jumpBufferTime;
 
     [Header("Kicking")]
+    // [SerializeField]
+    // private float _lockKickingTime;
     [SerializeField]
-    private float _lockKickingTime;
+    private float _kickVelocityThreshhold;
     [SerializeField]
     private float _kickDelay;
     [SerializeField]
-    private float _kickCounterDelay;
+    private float _kickDuration;
+    [SerializeField]
+    private float _kickCooldown;
+    private bool _lockKick;
 
     private float _coyoteTimer = 0f;
     private float _bufferTimer = 0f;
     private bool _jumpBufferReady = false;
 
     private bool _onGround;
-    private bool _climbing;
     private bool _canMove;
     private bool _canJump;
     private bool _jumping;
     private bool _jumpCheckLock;
     private bool _kicking;
-    private bool _lockKicking;
+    // private bool _lockKicking;
 
     private int _facingDirection;
 
-    private float _kickVelocity;
-    public float kickVelocity { get => _kickVelocity; }
-
-    private float _storeVelocity;
+    private float _currentVelocity;
+    public float currentVelocity { get => _currentVelocity; }
 
     public void DelegateStart()
     {
@@ -75,6 +73,7 @@ public class PlayerMovementController : MonoBehaviour
 
         _canMove = true;
         _canJump = false;
+        _lockKick = false;
     }
 
     public void DelegateUpdate()
@@ -86,7 +85,6 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         GroundCheckHandle();
-        ClimbingCheckHandle();
 
         GravityHandle();
 
@@ -97,11 +95,25 @@ public class PlayerMovementController : MonoBehaviour
         JumpBufferHandle();
 
         UpdateAnimation();
+
+        if (Input.GetKeyDown(KeyCode.L)) SwitchDirection(Vector2.right);
     }
 
     public void DelegateFixedUpdate()
     {
         RunningHandle();
+    }
+
+    public void AddSpeedBoost(float speedAdd)
+    {
+        _speedBoost += speedAdd;
+    }
+
+    public void SwitchDirection(Vector2 _direction)
+    {
+        float magnitude = _currentVelocity;
+        manager.body.velocity = Vector2.zero;
+        _motion.AddBonusVelocity(_direction * magnitude);
     }
 
     private void GroundCheckHandle()
@@ -147,30 +159,6 @@ public class PlayerMovementController : MonoBehaviour
         _onGround = leftRayCheck || centerRayCheck || rightRayCheck;
     }
 
-    private void ClimbingCheckHandle()
-    {
-        bool topRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position + Vector3.up * _climbCheckRadius,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-        bool centerRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-        bool botRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position + Vector3.down * _climbCheckRadius,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-
-        _climbing = !_onGround && (topRayCheck || centerRayCheck || botRayCheck);
-    }
-
     private void JumpingHandle()
     {
         if (_kicking) return;
@@ -213,8 +201,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             _canJump = true;
         }
-
-        if (_climbing) _canJump = true;
     }
 
     private void JumpBufferHandle()
@@ -244,27 +230,17 @@ public class PlayerMovementController : MonoBehaviour
         _jumping = true;
         _jumpCheckLock = true;
 
-        if (!_climbing)
-        {
-            _motion.AddBonusVelocity(
-                Vector2.up * _jumpHeight
-                + Vector2.down * manager.body.velocity.y
-            );
-        }
-        else
-        {
-            manager.body.velocity = Vector2.zero;
-            _motion.AddBonusVelocity(
-                (Vector2.right * -_facingDirection + Vector2.up * 2f).normalized * Mathf.Max(_kickVelocity * 1.2f, _jumpHeight)
-                + Vector2.down * manager.body.velocity.y
-            );
-            _facingDirection *= -1;
-        }
+        _motion.AddBonusVelocity(
+            Vector2.up * _jumpHeight
+            + Vector2.down * manager.body.velocity.y
+        );
     }
 
     private void RunningHandle()
     {
         if (_kicking) return;
+
+        _speedBoost = Mathf.Lerp(_speedBoost, 0f, _speedBoostExpire);
 
         if (manager.inputManager.horizontalDirection == 0) 
         {
@@ -289,7 +265,7 @@ public class PlayerMovementController : MonoBehaviour
         if (_canMove) 
         {
             _motion.AddBonusVelocity(new Vector2(
-                manager.inputManager.horizontalDirection * _runningSpeed,
+                manager.inputManager.horizontalDirection * (_runningSpeed + _speedBoost),
                 0f
             ));
         }
@@ -297,28 +273,14 @@ public class PlayerMovementController : MonoBehaviour
 
     private void KickHandle()
     {
-        _kickVelocity = Mathf.Lerp(_kickVelocity, _motion.currentVelocityMagnitude, .01f);
+        _currentVelocity = Mathf.Lerp(_currentVelocity, _motion.currentVelocityMagnitude, .01f);
 
         if (!_kicking)
         {
-            if (manager.inputManager.click)
+            if (!_lockKick && _currentVelocity >= _kickVelocityThreshhold && manager.inputManager.click)
             {
                 StartCoroutine(KickCoroutine());
-                
-            }
-        }
-        else 
-        {
-            bool headRayCheck = Physics2D.Raycast(
-                _climbCheckCenter.position,
-                Vector2.up,
-                _groundCheckRayLength + _climbCheckRadius,
-                _groundMask
-            );
-            if (!_lockKicking && (_climbing || _onGround || headRayCheck))
-            {
-                manager.body.drag = 2f;
-                _kicking = false;
+                _lockKick = true;
             }
         }
     }
@@ -326,46 +288,51 @@ public class PlayerMovementController : MonoBehaviour
     {
         _kicking = true;
         manager.body.velocity = Vector2.zero;
-        Vector2 velocity = manager.inputManager.cursorDirection * _kickVelocity * 1.2f;
+        Vector2 velocity = manager.inputManager.cursorDirection * _currentVelocity * 1.2f;
 
         manager.pAnimation.kickDirection = manager.inputManager.cursorDirection.normalized;
 
         yield return new WaitForSeconds(_kickDelay);
 
-        StartCoroutine(KickRaw(velocity));
+        KickRaw(velocity);
     }
-    private IEnumerator KickRaw(Vector2 velocity)
+    private void KickRaw(Vector2 velocity)
     {
         _kicking = true;
         manager.body.velocity = Vector2.zero;
         manager.body.drag = 0f;
         _facingDirection = (int)Mathf.Sign(manager.inputManager.cursorDirection.x);
 
-        _motion.AddBonusVelocity(velocity*2f);
-        yield return new WaitForSeconds(_kickCounterDelay);
-        _motion.AddBonusVelocity(-velocity);
+        _motion.AddBonusVelocity(velocity*1.2f);
 
-        StartCoroutine(LockKickingMovement());
+        StartCoroutine(ExpireKicking());
     }
-    private IEnumerator LockKickingMovement()
+    private IEnumerator ExpireKicking()
     {
-        _lockKicking = true;
+        // _lockKicking = true;
 
-        yield return new WaitForSeconds(_lockKickingTime);
+        // yield return new WaitForSeconds(_lockKickingTime);
 
-        _lockKicking = false;
+        // _lockKicking = false;
+
+        yield return new WaitForSeconds(_kickDuration);
+
+        if (_kicking)
+        {
+            _kicking = false;
+            manager.body.drag = 2f;
+        }
+
+        yield return new WaitForSeconds(_kickCooldown);
+
+        _lockKick = false;
     }
 
     private void GravityHandle()
     {
         if (!_kicking)
         {
-            if (_climbing) 
-            {
-                if (manager.body.velocity.y < 0f) manager.body.gravityScale = 1f;
-                else manager.body.gravityScale = 8f;
-            }
-            else manager.body.gravityScale = 8f;
+            manager.body.gravityScale = 8f;
         }
         else
         {
@@ -376,10 +343,9 @@ public class PlayerMovementController : MonoBehaviour
     private void UpdateAnimation()
     {
         manager.pAnimation.jumping = _jumping;
-        manager.pAnimation.falling = manager.body.velocity.y < 0f && !_onGround && !_climbing;
+        manager.pAnimation.falling = manager.body.velocity.y < 0f && !_onGround;
         if (manager.inputManager.horizontalDirection != 0) manager.pAnimation.running = _facingDirection;
         else manager.pAnimation.running = 0f;
-        manager.pAnimation.climbing = _climbing;
         manager.pAnimation.kicking = _kicking;
         manager.pAnimation.kickPrepare = _kicking && (manager.body.velocity.magnitude < 1f);
     }
