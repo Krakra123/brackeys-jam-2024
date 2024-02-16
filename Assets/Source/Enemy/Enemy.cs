@@ -17,7 +17,7 @@ public class Enemy : MonoBehaviour
     protected Vector2 kickDirection;
     private Vector3 position;
 
-    private void Awake()
+    protected virtual void Start()
     {
         Sprite = transform.Find("Sprite").gameObject;
         FLIP = Flip;
@@ -53,7 +53,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    public void reset()
+    public void Reset()
     {
         transform.position = SpawnPosition;
         Hurt = false;
