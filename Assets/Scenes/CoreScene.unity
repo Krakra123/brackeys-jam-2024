@@ -251,7 +251,7 @@ MonoBehaviour:
   _rightXBoundOffset: 7
   _botYBoundOffset: -6
   _topYBoundOffset: 6
-  _camaraFollowSmoothness: 0.009
+  _camaraFollowSmoothness: 0.02
   _idealPlayerOffset: {x: -3, y: -1}
   _cameraBounds:
   - {fileID: 92700203}

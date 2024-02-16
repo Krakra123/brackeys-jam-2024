@@ -76,8 +76,6 @@ public class PlayerMovementController : MonoBehaviour
     private float _currentVelocity;
     public float currentVelocity { get => _currentVelocity; }
 
-    private float _storeVelocity;
-
     public void DelegateStart()
     {
         _motion = manager.motionManager;

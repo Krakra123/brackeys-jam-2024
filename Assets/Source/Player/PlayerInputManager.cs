@@ -18,6 +18,17 @@ public class PlayerInputManager : MonoBehaviour
     private Vector2 _cursorDirection;
     public Vector2 cursorDirection { get => _cursorDirection; }
 
+    private bool _lockControl;
+
+    public void LockControl()
+    {   
+        _lockControl = true;
+    }
+    public void UnlockControl()
+    {
+        _lockControl = false;
+    }
+
     public void DelegateStart()
     {
 
@@ -28,6 +39,8 @@ public class PlayerInputManager : MonoBehaviour
         _horizontalDirection = 0;
         _jump = false;
         _click = false;
+
+        if (_lockControl) return;
 
         if (Input.GetButton("Right"))
         {
