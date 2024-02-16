@@ -10,6 +10,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerMotionManager motionManager;
     public PlayerMovementController movementController;
     public PlayerAnimationController pAnimation;
+    public SpriteRenderer spriteRenderer;
 
     private void Start()
     {

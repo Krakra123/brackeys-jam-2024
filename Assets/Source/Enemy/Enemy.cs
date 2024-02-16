@@ -41,8 +41,14 @@ public class Enemy : MonoBehaviour
         return POS;
     }
 
-    public void Kill()
+    public virtual void Kill()
     {
+        GameManager.Instance.playerManager.movementController.SwitchDirection(new Vector2(
+            Mathf.Sign(GameManager.Instance.playerManager.body.velocity.x),
+            1f
+        ));
+        GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.up * 10f);
+
         if (Death == false)
         {
             Instantiate(StarEffect, transform.position, Quaternion.identity);
@@ -69,4 +75,11 @@ public class Enemy : MonoBehaviour
         Hurt = true;
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.tag == "Player")
+        {
+            Kill();
+        }
+    }
 }
