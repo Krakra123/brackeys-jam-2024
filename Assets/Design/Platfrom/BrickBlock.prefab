@@ -132,9 +132,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6db6531c16edeb4cb74f3931cbd742d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeDelayBreak: 0.25
-  TimeDelayReset: 1
-  EffectBreak: {fileID: 3889054384894591629, guid: 4068f4ef537a699498b7ad9781d8df59, type: 3}
+  _timeDelayBreak: 0.25
+  _timeDelayReset: 1
+  _effectBreak: {fileID: 3889054384894591629, guid: 4068f4ef537a699498b7ad9781d8df59, type: 3}
 --- !u!95 &3291909744755770013
 Animator:
   serializedVersion: 5
