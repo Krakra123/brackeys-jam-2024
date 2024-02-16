@@ -4,20 +4,20 @@ using UnityEngine;
 
 public class BreakablePlatform : MonoBehaviour
 {
-    public float TimeDelayBreak = 0;
-    public float TimeDelayReset = 0;
-    [SerializeField] private GameObject EffectBreak;
-    private float TimeBreak = 0;
-    private float TimeReset = 0;
+    public float _timeDelayBreak = 0;
+    public float _timeDelayReset = 0;
+    [SerializeField] private GameObject _effectBreak;
+    private float _timeBreak = 0;
+    private float _timeReset = 0;
     private bool _break = false;
     private bool _crack = false;
 
-    private GameObject Sprite;
+    private GameObject _sprite;
     private void Start()
     {
-        Sprite = transform.Find("Sprite").gameObject;
-        TimeBreak = TimeDelayReset;
-        TimeReset = TimeDelayReset;
+        _sprite = transform.Find("Sprite").gameObject;
+        _timeBreak = _timeDelayReset;
+        _timeReset = _timeDelayReset;
     }
 
     private void Update()
@@ -26,7 +26,7 @@ public class BreakablePlatform : MonoBehaviour
         if (IsCollide() == true)
         {
             _crack = true;
-            TimeBreak = TimeDelayBreak;
+            _timeBreak = _timeDelayBreak;
         }
     }
 
@@ -34,26 +34,31 @@ public class BreakablePlatform : MonoBehaviour
     {
         if (_crack == true) 
         { 
-            if (TimeBreak > 0)
+            if (_timeBreak > 0)
             {
                 gameObject.GetComponent<Animator>().Play("Base Layer.shake");
-                TimeBreak -= Time.deltaTime;
+                _timeBreak -= Time.deltaTime;
             }
             else if(_break == false)
             {
-                TimeBreak = 0;
-                TimeReset = TimeDelayReset;
+                _timeBreak = 0;
+                _timeReset = _timeDelayReset;
                 Break();
             }
 
-            if (TimeReset > 0)
+            if (_timeReset > 0)
             {
-                TimeReset -= Time.deltaTime;
+                _timeReset -= Time.deltaTime;
+                if (_timeReset <= 0.3f)
+                {
+                    _sprite.SetActive(true);
+                    GetComponent<Animator>().Play("Base Layer.reset");
+                }
             }
             else if (_break == true)
             {
                 reset();
-                TimeReset = 0;
+                _timeReset = 0;
             }
         }
     }
@@ -77,16 +82,15 @@ public class BreakablePlatform : MonoBehaviour
     {
         GetComponent<BoxCollider2D>().enabled = true;
         gameObject.GetComponent<Animator>().Play("Base Layer.default");
-        Sprite.SetActive(true);
         _break = false;
         _crack = false;
     }
 
     private void Break()
     {
-        Instantiate(EffectBreak, transform.position, Quaternion.identity);
+        Instantiate(_effectBreak, transform.position, Quaternion.identity);
         GetComponent<BoxCollider2D>().enabled = false;
         _break = true;
-        Sprite.SetActive(false);
+        _sprite.SetActive(false);
     }
 }
