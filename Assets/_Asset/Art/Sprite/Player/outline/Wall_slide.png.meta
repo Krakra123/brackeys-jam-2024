@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4473649ac35c62a4faa8ff998028ec71
+guid: 8df744cd0e2a92a4cb470b08c3d990ee
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -71,7 +71,7 @@ TextureImporter:
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
-    textureFormat: 4
+    textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
@@ -110,7 +110,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: jump_0
+      name: Wall_slide_0
       rect:
         serializedVersion: 2
         x: 0
@@ -124,29 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0fb905531ba4d504385e4d9356abf020
-      internalID: 1683037779
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: jump_1
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 48
-        height: 48
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 18bb247e2f8de5d44a6c6e963b2566b1
-      internalID: 27840944
+      spriteID: d837bfd2c2f09594c862b290ebdf8257
+      internalID: -38659497
       vertices: []
       indices: 
       edges: []
@@ -162,8 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      jump_0: 1683037779
-      jump_1: 27840944
+      Wall_slide_0: -38659497
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
