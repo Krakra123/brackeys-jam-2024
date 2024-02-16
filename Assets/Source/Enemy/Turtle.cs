@@ -12,8 +12,11 @@ public class Turtle : Enemy
     private float Gravity = 0;
     private bool fall = false;
     // Start is called before the first frame update
-    void Start()
+    
+    protected override void Start()
     {
+        base.Start();
+
         Body = GetComponent<Rigidbody2D>();
     }
 
@@ -22,25 +25,25 @@ public class Turtle : Enemy
     {
         if (Hurt && Spinning == false)
         {
-            Spin(base.kickDirection);
+            Spin(kickDirection);
         }
 
         if (Spinning == false)
         {
-            base.AutoFlip();
-            Raycheck.position = new Vector2(base.direction.x * 0.8f, -0.5f) + Position();
-            if (checkWall() == true || checkGround() == false)
+            AutoFlip();
+            Raycheck.position = new Vector2(direction.x * 0.8f, -0.5f) + Position();
+            if (CheckWall() == true || CheckGround() == false)
             {
                 Re_dir();
             }
-            Body.velocity = base.Speed * base.direction;
+            Body.velocity = Speed * direction;
         }
         else
         {
-            if(checkImpact() && Death == false)
+            if(CheckImpact() && Death == false)
             {
                 Spinning = false;
-                base.Kill();
+                Kill();
             }
             if(IsGrounded() == false)
             {
@@ -49,7 +52,7 @@ public class Turtle : Enemy
                 Gravity = Mathf.Clamp(Gravity, 0, 30);
             }
             EnemiesCollide();
-            Body.velocity = SpeedSpin * base.direction + new Vector2(0,-Gravity);
+            Body.velocity = SpeedSpin * direction + new Vector2(0,-Gravity);
         }
 
         if (Death)
@@ -58,10 +61,10 @@ public class Turtle : Enemy
         }
     }
 
-    bool checkWall()
+    bool CheckWall()
     {
-        RaycastHit2D WallHit = Physics2D.Raycast(Raycheck.position, new Vector2(base.direction.x, 0), 0.25f);
-        Debug.DrawRay(Raycheck.position, new Vector2(base.direction.x, 0) * 0.25f, Color.red);
+        RaycastHit2D WallHit = Physics2D.Raycast(Raycheck.position, new Vector2(direction.x, 0), 0.25f);
+        Debug.DrawRay(Raycheck.position, new Vector2(direction.x, 0) * 0.25f, Color.red);
         bool touch = false;
         if (WallHit.collider != null) 
         {
@@ -70,7 +73,7 @@ public class Turtle : Enemy
         return touch;
     }
 
-    bool checkGround()
+    bool CheckGround()
     {
         RaycastHit2D GroundHit = Physics2D.Raycast(Raycheck.position,  Vector2.down, 0.25f);
         bool touch = false;
@@ -78,16 +81,16 @@ public class Turtle : Enemy
         {
             if (GroundHit.collider.gameObject.tag == "Enemy")
             {
-                GroundHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                GroundHit.collider.gameObject.GetComponent<EnemyManage>().Kill();
             }
             touch = true;
         }
         return touch;
     }
 
-    bool checkImpact()
+    bool CheckImpact()
     {
-        RaycastHit2D ImpactHit = Physics2D.Raycast(new Vector2(1.6f * base.direction.x,0.15f) + Position(), Vector2.down, 0.7f);
+        RaycastHit2D ImpactHit = Physics2D.Raycast(new Vector2(1.6f * direction.x,0.15f) + Position(), Vector2.down, 0.7f);
 
         bool touch = false;
         if (ImpactHit.collider != null)
@@ -96,7 +99,7 @@ public class Turtle : Enemy
             {
                 if (fall == false)
                 {
-                    ImpactHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                    ImpactHit.collider.gameObject.GetComponent<EnemyManage>().Kill();
                 }
             }
             else
@@ -115,7 +118,7 @@ public class Turtle : Enemy
             if (RayHit.collider.gameObject.tag == "Enemy" && RayHit.collider.gameObject != gameObject)
             {
                 Debug.Log(RayHit.collider.gameObject.name);
-                RayHit.collider.gameObject.GetComponent<EnemyManage>().kill();
+                RayHit.collider.gameObject.GetComponent<EnemyManage>().Kill();
                 if (fall == true)
                 {
                     Kill();
@@ -137,22 +140,22 @@ public class Turtle : Enemy
     }
     private void Re_dir() 
     {
-        base.direction = -base.direction;
+        direction = -direction;
     }
 
     public void Spin(Vector2 _direction)
     {
         if (Spinning == false)
         {
-            base.Sprite.GetComponent<Animator>().Play("Base Layer.Spin");
+            Sprite.GetComponent<Animator>().Play("Base Layer.Spin");
             Spinning = true;
             if (_direction.x > 0)
             {
-                base.direction.x = 1;
+                direction.x = 1;
             }
             else
             {
-                base.direction.x = -1;
+                direction.x = -1;
             }
         }
     }

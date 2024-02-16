@@ -1,15 +1,33 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.AI;
 
 public class CameraMan : MonoBehaviour
 {
-    public Vector2 Offset = Vector2.zero;
-    public bool followPlayer = true;
+    private GameObject _player;
+
+    [Header("Camera Following")]
     [SerializeField]
-    private float smoothness = 0.5f;
-    private GameObject Camera;
-    public GameObject Player;
+    private float _leftXBoundOffset;
+    [SerializeField]
+    private float _rightXBoundOffset;
+    [SerializeField]
+    private float _botYBoundOffset;
+    [SerializeField]
+    private float _topYBoundOffset;
+    [SerializeField]
+    private float _camaraFollowSmoothness;
+
+    [SerializeField]
+    private Vector2 _idealPlayerOffset;
+
+    [SerializeField]
+    private Transform[] _cameraBounds = new Transform[2];
+
+    private bool _followingXAxis;
+    private bool _followingYAxis;
+
     private float ShakePowter;
     private float TimeShake;
     private bool _shake;
@@ -21,25 +39,21 @@ public class CameraMan : MonoBehaviour
 
     private void Start()
     {
-        Camera = transform.Find("Camera").gameObject;
+        _player = GameManager.Instance.playerManager.gameObject;
     }
-    void Update()
+
+    private void Update()
     {
         Timer();
-    }
-    private void FixedUpdate()
-    {
-        if (followPlayer == true)
-        {
-            FollowPlayer();
-        }
+
+        FollowPlayerHandle();
     }
 
     void ShakeCamera()
     {
         Vector2 _offset = new Vector2(Random.Range(-1f, 1f), Random.Range(-1f, 1f)) * ShakePowter;
         Vector2 _pos = _offset * Mathf.Pow(TimeShake / TIME_SHAKE,2) + new Vector2(transform.position.x, transform.position.y);
-        Camera.transform.position = new Vector3(_pos.x, _pos.y,-10);
+        Camera.main.transform.position = new Vector3(_pos.x, _pos.y,-10);
     }
 
     private void Timer()
@@ -68,20 +82,64 @@ public class CameraMan : MonoBehaviour
         }
         else
         {
-            Camera.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
+            Camera.main.transform.position = new Vector3(transform.position.x, transform.position.y, -10);
         }
     }
 
-    void FollowPlayer()
+    private void FollowPlayerHandle()
     {
-        if (Player == null)
+        Vector2 newCameraPosition = transform.position;
+        Vector2 deltaWithPlayer = (Vector2)transform.position - ((Vector2)_player.transform.position - _idealPlayerOffset);
+
+        const float SNAPDISTANCE = .1f;
+
+        if (_followingXAxis)
         {
-            Debug.LogError("WibuKa : không tìm thấy object player {Player = null}");
+            float target = _player.transform.position.x - _idealPlayerOffset.x;
+            newCameraPosition.x = Mathf.Lerp(
+                newCameraPosition.x, 
+                target, 
+                _camaraFollowSmoothness
+            );
+
+            if (Mathf.Abs(newCameraPosition.x - target) < SNAPDISTANCE) 
+            {
+                newCameraPosition.x = target;
+                _followingXAxis = false;
+            }
         }
-        transform.position = Vector2.Lerp(transform.position, Player.transform.position + new Vector3(Offset.x, Offset.y,0), smoothness);
+        else if (deltaWithPlayer.x < _leftXBoundOffset || deltaWithPlayer.x > _rightXBoundOffset)
+        {
+            _followingXAxis = true;
+        }
+        
+        if (_followingYAxis)
+        {
+            float target = _player.transform.position.y - _idealPlayerOffset.y;
+            newCameraPosition.y = Mathf.Lerp(
+                newCameraPosition.y, 
+                target, 
+                _camaraFollowSmoothness
+            );
+
+            if (Mathf.Abs(newCameraPosition.y - target) < SNAPDISTANCE) 
+            {
+                newCameraPosition.y = target;
+                _followingYAxis = false;
+            }
+        }
+        else if (deltaWithPlayer.y < _botYBoundOffset || deltaWithPlayer.y > _topYBoundOffset)
+        {
+            _followingYAxis = true;
+        }
+
+        newCameraPosition.x = Mathf.Clamp(newCameraPosition.x, _cameraBounds[0].position.x, _cameraBounds[1].position.x);
+        newCameraPosition.y = Mathf.Clamp(newCameraPosition.y, _cameraBounds[0].position.y, _cameraBounds[1].position.y);
+
+        transform.position = newCameraPosition;
     }
 
-    void Shake(float _powter, float _timeShake)
+    public void Shake(float _powter, float _timeShake)
     {
         ShakePowter = _powter;
         TimeShake = _timeShake;
