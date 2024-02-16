@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 773e82cf862190c44b40565cf37aa8b1
+guid: c52d5674ee5f45843b1f232691f14422
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,12 +110,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spring_jump_0
+      name: speed_buff_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 25
+        width: 18
         height: 18
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -124,50 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d4ea756f76e3028499554e749b794e00
-      internalID: -1603585446
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spring_jump_1
-      rect:
-        serializedVersion: 2
-        x: 25
-        y: 0
-        width: 25
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8e1ccd77bef72934c9f934a35b5b0509
-      internalID: -951676886
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spring_jump_2
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 0
-        width: 25
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9d4a812d144b29f43b19e97113bb1cb3
-      internalID: -411123926
+      spriteID: 229e3fda8a7c03a4cafc5487a85d9c4c
+      internalID: 52258564
       vertices: []
       indices: 
       edges: []
@@ -183,9 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      spring_jump_0: -1603585446
-      spring_jump_1: -951676886
-      spring_jump_2: -411123926
+      speed_buff_0: 52258564
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
