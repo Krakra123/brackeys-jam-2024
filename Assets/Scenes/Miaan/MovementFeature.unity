@@ -436,7 +436,7 @@ MonoBehaviour:
   _climbCheckCenter: {fileID: 192875705}
   _climbCheckRadius: 0.9
   _climbCheckRayLength: 0.6
-  _runningSpeed: 2
+  _runningSpeed: 1.7
   _jumpHeight: 30
   _coyoteTime: 0.08
   _jumpBufferTime: 0.12

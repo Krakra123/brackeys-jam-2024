@@ -80,7 +80,7 @@ public class PlayerMovementController : MonoBehaviour
         if (!_kicking)
         {
             if (manager.inputManager.horizontalDirection != 0) 
-                _facingDirection = manager.inputManager.horizontalDirection;
+                _facingDirection = (int)Mathf.Sign(manager.inputManager.horizontalDirection);
         }
 
         GroundCheckHandle();
