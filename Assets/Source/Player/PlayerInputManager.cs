@@ -6,8 +6,8 @@ public class PlayerInputManager : MonoBehaviour
 {
     public PlayerManager manager { get; set; }
 
-    private int _horizontalDirection;
-    public int horizontalDirection { get => _horizontalDirection; }
+    private float _horizontalDirection;
+    public float horizontalDirection { get => _horizontalDirection; }
 
     private bool _jump;
     public bool jump { get => _jump; }
