@@ -9,17 +9,21 @@ public class PlayerManager : MonoBehaviour
     public PlayerInputManager inputManager;
     public PlayerMotionManager motionManager;
     public PlayerMovementController movementController;
+    public PlayerAnimationController pAnimation;
 
     private void Start()
     {
         inputManager.manager = this;
         motionManager.manager = this;
         movementController.manager = this;
+        pAnimation.manager = this;
 
         inputManager.DelegateStart();
         
         movementController.DelegateStart();
         motionManager.DelegateStart();
+
+        pAnimation.DelegateStart();
     }
 
     private void Update()
@@ -28,6 +32,8 @@ public class PlayerManager : MonoBehaviour
 
         movementController.DelegateUpdate();
         motionManager.DelegateUpdate();
+        
+        pAnimation.DelegateUpdate();
     }
 
     private void FixedUpdate()
@@ -36,5 +42,7 @@ public class PlayerManager : MonoBehaviour
 
         movementController.DelegateFixedUpdate();
         motionManager.DelegateFixedUpdate();
+        
+        // animation.DelegateFixedUpdate();
     }
 }

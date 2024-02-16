@@ -57,6 +57,8 @@ public class PlayerMovementController : MonoBehaviour
     private bool _climbing;
     private bool _canMove;
     private bool _canJump;
+    private bool _jumping;
+    private bool _jumpCheckLock;
     private bool _kicking;
     private bool _lockKicking;
 
@@ -72,7 +74,7 @@ public class PlayerMovementController : MonoBehaviour
         _motion = manager.motionManager;
 
         _canMove = true;
-        // _canJump = false;
+        _canJump = false;
     }
 
     public void DelegateUpdate()
@@ -93,6 +95,8 @@ public class PlayerMovementController : MonoBehaviour
         JumpAvailabilityCheck();
         JumpingHandle();
         JumpBufferHandle();
+
+        UpdateAnimation();
     }
 
     public void DelegateFixedUpdate()
@@ -183,6 +187,15 @@ public class PlayerMovementController : MonoBehaviour
 
     private void JumpAvailabilityCheck()
     {
+        if (_jumpCheckLock && !_onGround) 
+        {
+            _jumpCheckLock = false;
+        }
+        if (!_jumpCheckLock && _onGround)
+        {
+            _jumping = false;
+        }
+
         if (!_onGround)
         {
             _coyoteTimer += Time.deltaTime;
@@ -228,6 +241,9 @@ public class PlayerMovementController : MonoBehaviour
 
     private void JumpRaw()
     {
+        _jumping = true;
+        _jumpCheckLock = true;
+
         if (!_climbing)
         {
             _motion.AddBonusVelocity(
@@ -347,5 +363,14 @@ public class PlayerMovementController : MonoBehaviour
         {
             manager.body.gravityScale = 0f;
         }
+    }
+
+    private void UpdateAnimation()
+    {
+        manager.pAnimation.jumping = _jumping;
+        manager.pAnimation.falling = manager.body.velocity.y < 0f && !_onGround && !_climbing;
+        if (manager.inputManager.horizontalDirection != 0) manager.pAnimation.running = _facingDirection;
+        else manager.pAnimation.running = 0f;
+        manager.pAnimation.climbing = _climbing;
     }
 }
