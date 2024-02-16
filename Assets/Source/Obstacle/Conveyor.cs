@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpringBehaviour : MonoBehaviour
+public class Conveyor : MonoBehaviour
 {
     [SerializeField]
     private SpriteRenderer _renderer;
@@ -17,6 +17,8 @@ public class SpringBehaviour : MonoBehaviour
 
     [SerializeField]
     private float _velocityBoost;
+    [SerializeField]
+    private float _direction;
 
     private bool _used;
 
@@ -25,8 +27,8 @@ public class SpringBehaviour : MonoBehaviour
         _used = true;
         _renderer.sprite = _usedSprite;
 
-        GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.up);
-        GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.up * _velocityBoost);
+        GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.right * _direction);
+        GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.right * _direction * _velocityBoost);
 
         StartCoroutine(Recover());
     }

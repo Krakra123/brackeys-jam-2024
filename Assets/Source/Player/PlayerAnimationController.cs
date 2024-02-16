@@ -12,7 +12,6 @@ public class PlayerAnimationController : MonoBehaviour
     public bool jumping { get; set; }
     public bool falling { get; set; }
     public float running { get; set; }
-    public bool climbing { get; set; }
     public bool kicking { get; set; }
     public bool kickPrepare { get; set; }
     public Vector2 kickDirection { get; set; }
@@ -74,11 +73,6 @@ public class PlayerAnimationController : MonoBehaviour
                 _animator.Play("Kick0");
                 currentAnimation = "Kick0";
             }
-        }
-        else if (climbing)
-        {
-            _animator.Play("Climb");
-            currentAnimation = "Climb";
         }
         else if (falling)
         {

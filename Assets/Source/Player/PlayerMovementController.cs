@@ -19,14 +19,6 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float _groundCheckRayLength;
 
-    [Header("Climb Check")]
-    [SerializeField]
-    private Transform _climbCheckCenter;
-    [SerializeField]
-    private float _climbCheckRadius;
-    [SerializeField]
-    private float _climbCheckRayLength;
-
     [Header("Running")]
     [SerializeField]
     private float _runningSpeed;
@@ -63,7 +55,6 @@ public class PlayerMovementController : MonoBehaviour
     private bool _jumpBufferReady = false;
 
     private bool _onGround;
-    private bool _climbing;
     private bool _canMove;
     private bool _canJump;
     private bool _jumping;
@@ -94,7 +85,6 @@ public class PlayerMovementController : MonoBehaviour
         }
 
         GroundCheckHandle();
-        ClimbingCheckHandle();
 
         GravityHandle();
 
@@ -169,30 +159,6 @@ public class PlayerMovementController : MonoBehaviour
         _onGround = leftRayCheck || centerRayCheck || rightRayCheck;
     }
 
-    private void ClimbingCheckHandle()
-    {
-        bool topRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position + Vector3.up * _climbCheckRadius,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-        bool centerRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-        bool botRayCheck = Physics2D.Raycast(
-            _climbCheckCenter.position + Vector3.down * _climbCheckRadius,
-            Vector2.right * _facingDirection,
-            _climbCheckRayLength,
-            _groundMask
-        );
-
-        _climbing = !_onGround && (topRayCheck || centerRayCheck || botRayCheck);
-    }
-
     private void JumpingHandle()
     {
         if (_kicking) return;
@@ -235,8 +201,6 @@ public class PlayerMovementController : MonoBehaviour
         {
             _canJump = true;
         }
-
-        if (_climbing) _canJump = true;
     }
 
     private void JumpBufferHandle()
@@ -266,22 +230,10 @@ public class PlayerMovementController : MonoBehaviour
         _jumping = true;
         _jumpCheckLock = true;
 
-        if (!_climbing)
-        {
-            _motion.AddBonusVelocity(
-                Vector2.up * _jumpHeight
-                + Vector2.down * manager.body.velocity.y
-            );
-        }
-        else
-        {
-            manager.body.velocity = Vector2.zero;
-            _motion.AddBonusVelocity(
-                (Vector2.right * -_facingDirection + Vector2.up * 2f).normalized * Mathf.Max(_currentVelocity * 1.2f, _jumpHeight)
-                + Vector2.down * manager.body.velocity.y
-            );
-            _facingDirection *= -1;
-        }
+        _motion.AddBonusVelocity(
+            Vector2.up * _jumpHeight
+            + Vector2.down * manager.body.velocity.y
+        );
     }
 
     private void RunningHandle()
@@ -330,20 +282,6 @@ public class PlayerMovementController : MonoBehaviour
                 StartCoroutine(KickCoroutine());
                 _lockKick = true;
             }
-        }
-        else 
-        {
-            bool headRayCheck = Physics2D.Raycast(
-                _climbCheckCenter.position,
-                Vector2.up,
-                _groundCheckRayLength + _climbCheckRadius,
-                _groundMask
-            );
-            // if (!_lockKicking && (_climbing || _onGround || headRayCheck))
-            // {
-            //     manager.body.drag = 2f;
-            //     _kicking = false;
-            // }
         }
     }
     private IEnumerator KickCoroutine()
@@ -394,12 +332,7 @@ public class PlayerMovementController : MonoBehaviour
     {
         if (!_kicking)
         {
-            if (_climbing) 
-            {
-                if (manager.body.velocity.y < 0f) manager.body.gravityScale = 1f;
-                else manager.body.gravityScale = 8f;
-            }
-            else manager.body.gravityScale = 8f;
+            manager.body.gravityScale = 8f;
         }
         else
         {
@@ -410,10 +343,9 @@ public class PlayerMovementController : MonoBehaviour
     private void UpdateAnimation()
     {
         manager.pAnimation.jumping = _jumping;
-        manager.pAnimation.falling = manager.body.velocity.y < 0f && !_onGround && !_climbing;
+        manager.pAnimation.falling = manager.body.velocity.y < 0f && !_onGround;
         if (manager.inputManager.horizontalDirection != 0) manager.pAnimation.running = _facingDirection;
         else manager.pAnimation.running = 0f;
-        manager.pAnimation.climbing = _climbing;
         manager.pAnimation.kicking = _kicking;
         manager.pAnimation.kickPrepare = _kicking && (manager.body.velocity.magnitude < 1f);
     }

@@ -12,6 +12,8 @@ public class Bee : Enemy
     private Vector2 EndPosition;
     private Vector2 Target;
     private Rigidbody2D Body;
+    [SerializeField]
+    private Rigidbody2D _stinkBody;
 
     public bool fly = true;
 
@@ -31,7 +33,7 @@ public class Bee : Enemy
         if (Hurt && Death == false)
         {
             Kill();
-        }
+        } 
         if (fly && Death == false)
         {
             float distance = Vector3.Distance(Position(), Target);
@@ -42,8 +44,16 @@ public class Bee : Enemy
             }
             direction = TargetToDirection();
             Body.velocity = Speed * direction;
+            _stinkBody.velocity = Speed * direction;
         }
 
+    }
+
+    public override void Kill()
+    {
+        _stinkBody.GetComponent<BeeStink>().stinkDisable = true;
+
+        base.Kill();
     }
 
     Vector2 TargetToDirection()
