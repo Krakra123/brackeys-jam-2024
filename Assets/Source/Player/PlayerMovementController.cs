@@ -309,7 +309,13 @@ public class PlayerMovementController : MonoBehaviour
         }
         else 
         {
-            if (!_lockKicking && (_climbing || _onGround))
+            bool headRayCheck = Physics2D.Raycast(
+                _climbCheckCenter.position,
+                Vector2.up,
+                _groundCheckRayLength + _climbCheckRadius,
+                _groundMask
+            );
+            if (!_lockKicking && (_climbing || _onGround || headRayCheck))
             {
                 manager.body.drag = 2f;
                 _kicking = false;
@@ -321,6 +327,8 @@ public class PlayerMovementController : MonoBehaviour
         _kicking = true;
         manager.body.velocity = Vector2.zero;
         Vector2 velocity = manager.inputManager.cursorDirection * _kickVelocity * 1.2f;
+
+        manager.pAnimation.kickDirection = manager.inputManager.cursorDirection.normalized;
 
         yield return new WaitForSeconds(_kickDelay);
 
@@ -372,5 +380,7 @@ public class PlayerMovementController : MonoBehaviour
         if (manager.inputManager.horizontalDirection != 0) manager.pAnimation.running = _facingDirection;
         else manager.pAnimation.running = 0f;
         manager.pAnimation.climbing = _climbing;
+        manager.pAnimation.kicking = _kicking;
+        manager.pAnimation.kickPrepare = _kicking && (manager.body.velocity.magnitude < 1f);
     }
 }
