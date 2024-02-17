@@ -5,14 +5,6 @@ using UnityEngine;
 public class Conveyor : MonoBehaviour
 {
     [SerializeField]
-    private SpriteRenderer _renderer;
-
-    [SerializeField]
-    private Sprite _usedSprite;
-    [SerializeField]
-    private Sprite _unUsedSprite;
-    
-    [SerializeField]
     private float _cooldown;
 
     [SerializeField]
@@ -25,7 +17,6 @@ public class Conveyor : MonoBehaviour
     private void Use()
     {
         _used = true;
-        _renderer.sprite = _usedSprite;
 
         GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.right * _direction);
         GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.right * _direction * _velocityBoost);
@@ -38,14 +29,11 @@ public class Conveyor : MonoBehaviour
         yield return new WaitForSeconds(_cooldown);
 
         _used = false;
-        _renderer.sprite = _unUsedSprite;
     }
 
     private void Start()
     {
         _used = false;
-        _renderer.sprite = _unUsedSprite;
-
     }
 
     private void OnTriggerStay2D(Collider2D other)
