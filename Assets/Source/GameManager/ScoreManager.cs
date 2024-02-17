@@ -7,6 +7,9 @@ public class ScoreManager : GenericSingleton<ScoreManager>
     private int _finalScore;
     public int finalScore { get => _finalScore; }
     public int displayScore { get; private set; }
+    
+    private float _finalTime;
+    public float finalTime { get => _finalTime; }
 
     [SerializeField]
     private float _scoreDisplayDelay;
@@ -38,6 +41,11 @@ public class ScoreManager : GenericSingleton<ScoreManager>
         displayScore += ammout;
 
         StartCoroutine(DisplayMessage(message));
+    }
+
+    public void AddTime(float ammout)
+    {
+        _finalTime += ammout;
     }
 
     private void Update()
