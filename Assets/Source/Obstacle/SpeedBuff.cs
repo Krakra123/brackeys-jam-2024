@@ -21,6 +21,8 @@ public class SpeedBuff : MonoBehaviour
         _renderer.color = new Color(0f, 0f, 0f, 0f);
         GameManager.Instance.playerManager.movementController.AddSpeedBoost(_speedBoost);
 
+        AudioManager.Instance.PlaySound(GameSound.Buff);
+
         StartCoroutine(Respawn());
     }
 

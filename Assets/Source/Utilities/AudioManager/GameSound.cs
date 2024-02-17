@@ -2,11 +2,15 @@ public enum GameSound
 {
     None,
     BGM,
-    ThemeMusic,
-
-    mess,
-    resp,
-    lose0,
-    lose1,
-    theme,
+    
+    Jump,
+    Kick,
+    Kill,
+    DoorKick,
+    Land,
+    Spring,
+    Convey,
+    Ding,
+    Buff,
+    Close
 }

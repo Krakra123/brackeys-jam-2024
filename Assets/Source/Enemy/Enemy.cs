@@ -46,6 +46,8 @@ public class Enemy : MonoBehaviour
     {
         ScoreManager.Instance.AddScoreRaw(20, "+20");
         GameManager.Instance.playerManager.movementController.ResetKick();
+        
+        AudioManager.Instance.PlaySound(GameSound.Kill);
 
         GameManager.Instance.playerManager.movementController.SwitchDirection(new Vector2(
             Mathf.Sign(GameManager.Instance.playerManager.body.velocity.x),

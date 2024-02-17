@@ -181,7 +181,11 @@ public class PlayerMovementController : MonoBehaviour
         }
         if (!_jumpCheckLock && _onGround)
         {
-            _jumping = false;
+            if (_jumping)
+            {
+                // AudioManager.Instance.PlaySound(GameSound.Land);
+                _jumping = false;
+            }
         }
 
         if (!_onGround)
@@ -229,6 +233,8 @@ public class PlayerMovementController : MonoBehaviour
     {
         _jumping = true;
         _jumpCheckLock = true;
+
+        AudioManager.Instance.PlaySound(GameSound.Jump);
 
         _motion.AddBonusVelocity(
             Vector2.up * _jumpHeight
@@ -302,6 +308,8 @@ public class PlayerMovementController : MonoBehaviour
         Vector2 velocity = manager.inputManager.cursorDirection * _currentVelocity * 1.2f;
 
         manager.pAnimation.kickDirection = manager.inputManager.cursorDirection.normalized;
+
+        AudioManager.Instance.PlaySound(GameSound.Kick);
 
         yield return new WaitForSeconds(_kickDelay);
 

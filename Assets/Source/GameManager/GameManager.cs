@@ -12,7 +12,9 @@ public class GameManager : GenericSingleton<GameManager>
     private Animator _screenCoverAnimator;
 
     [SerializeField]
-    private float _startDelay;
+    private float _coverDelay = .333333f;
+    [SerializeField]
+    private float _startDelay = .5f;
     [SerializeField]
     private float _endDelay;
 
@@ -87,6 +89,8 @@ public class GameManager : GenericSingleton<GameManager>
 
         _screenCoverAnimator.Play("Shoot");
 
+        AudioManager.Instance.PlaySound(GameSound.Close);
+
         yield return new WaitForSeconds(_endDelay);
 
         AsyncOperation nextSceneLoad = SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().buildIndex + 1);
@@ -100,8 +104,15 @@ public class GameManager : GenericSingleton<GameManager>
     private IEnumerator StartLevelCoroutine()
     {
         playerManager.spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
+        
         _screenCoverAnimator.Play("ReShoot");
+        AudioManager.Instance.PlaySound(GameSound.Close);
+
         playerManager.inputManager.LockControl();
+
+        yield return new WaitForSeconds(_coverDelay);
+
+        AudioManager.Instance.PlaySound(GameSound.DoorKick);
 
         yield return new WaitForSeconds(_startDelay);
 
@@ -122,6 +133,7 @@ public class GameManager : GenericSingleton<GameManager>
         levelOver = true;
 
         _screenCoverAnimator.Play("Shoot");
+        AudioManager.Instance.PlaySound(GameSound.Close);
 
         yield return new WaitForSeconds(_endDelay);
 
