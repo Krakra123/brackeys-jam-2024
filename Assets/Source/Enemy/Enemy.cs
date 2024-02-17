@@ -7,6 +7,7 @@ public class Enemy : MonoBehaviour
     public float Speed = 5;
     protected Vector2 direction = Vector2.left;
     protected GameObject Sprite;
+    [HideInInspector]
     public bool Flip = false;
     public bool Death = false; 
     public GameObject DeathEffect;
@@ -43,6 +44,8 @@ public class Enemy : MonoBehaviour
 
     public virtual void Kill()
     {
+        ScoreManager.Instance.AddScoreRaw(20, "+20");
+
         GameManager.Instance.playerManager.movementController.SwitchDirection(new Vector2(
             Mathf.Sign(GameManager.Instance.playerManager.body.velocity.x),
             1f

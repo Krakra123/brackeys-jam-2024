@@ -120,10 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb16623a88a1bc94e839d10ced19c6d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 9101278026426184132}
-  _usedSprite: {fileID: -95243871, guid: 524a76533c79749479877f2b8d265735, type: 3}
-  _unUsedSprite: {fileID: -476781347, guid: 524a76533c79749479877f2b8d265735, type: 3}
-  _cooldown: 1
+  _cooldown: 0.2
   _velocityBoost: 15
   _direction: 1
 --- !u!95 &212381561420695003
