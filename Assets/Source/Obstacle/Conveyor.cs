@@ -17,6 +17,7 @@ public class Conveyor : MonoBehaviour
     private void Use()
     {
         _used = true;
+        GameManager.Instance.playerManager.movementController.ResetKick();
 
         GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.right * _direction);
         GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.right * _direction * _velocityBoost);
