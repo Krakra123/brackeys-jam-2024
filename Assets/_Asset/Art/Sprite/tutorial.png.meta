@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 773e82cf862190c44b40565cf37aa8b1
+guid: 9ca41e0244ee2774db4882418f97aa96
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: spring_jump_0
+      name: tutorial_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 25
-        height: 18
+        width: 130
+        height: 61
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,50 +124,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 93cbca136e3dec84bb446a3e1463e7f1
-      internalID: 426716589
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spring_jump_1
-      rect:
-        serializedVersion: 2
-        x: 25
-        y: 0
-        width: 25
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b46279f1c0e87c944818267297180fc1
-      internalID: -1980460290
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: spring_jump_2
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 0
-        width: 25
-        height: 18
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 05af43a427174ea48aa3d9f676d64383
-      internalID: -2093391283
+      spriteID: 34107c2615eb2a549883f50a77cf9bd9
+      internalID: 1254708156
       vertices: []
       indices: 
       edges: []
@@ -183,9 +141,7 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      spring_jump_0: 426716589
-      spring_jump_1: -1980460290
-      spring_jump_2: -2093391283
+      tutorial_0: 1254708156
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
