@@ -273,7 +273,7 @@ public class PlayerMovementController : MonoBehaviour
 
     private void KickHandle()
     {
-        _currentVelocity = Mathf.Lerp(_currentVelocity, _motion.currentVelocityMagnitude, .01f);
+        _currentVelocity = Mathf.Lerp(_currentVelocity, _motion.currentVelocityMagnitude, .02f);
 
         if (!_kicking)
         {

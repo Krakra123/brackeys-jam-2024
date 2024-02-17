@@ -73,7 +73,6 @@ public class BreakablePlatform : MonoBehaviour
             Debug.DrawRay(RayPos, Vector2.right * 0.8f,Color.green);
             if (RayHit.collider != null)
             {
-                Debug.Log("crack");
                 Hit = true;
             }
         }

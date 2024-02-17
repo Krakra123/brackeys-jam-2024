@@ -21,7 +21,7 @@ public class DoorBehaviour : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.tag == "Player")
+        if (other.tag == "Player" && !GameManager.Instance.levelOver)
         {
             _isOpen = true;
             _renderer.sprite = _openSprite;
@@ -32,7 +32,7 @@ public class DoorBehaviour : MonoBehaviour
 
             GameManager.Instance.NextLevel();
             float velocity = GameManager.Instance.playerManager.movementController.currentVelocity;
-            ScoreManager.Instance.AddScore((int)velocity * 3, $"Kick-the-door Velocity: + {(int)velocity}x3");
+            ScoreManager.Instance.AddScoreQueue((int)velocity * 3, $"Kick-the-door\n+{(int)velocity} x3");
         }
     }
 }

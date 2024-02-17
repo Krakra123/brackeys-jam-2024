@@ -16,16 +16,19 @@ public class GameManager : GenericSingleton<GameManager>
     [SerializeField]
     private float _endDelay;
 
-    private bool levelOver;
+    public bool levelOver { get; private set; }
 
     public float maxVelocity { get; private set; }
     public float sumVelocity { get; private set; }
     private int _mediumCountInstance = 0;
 
+    private float _timer;
+
     private void Start()
     {
         StartLevel();
         levelOver = false;
+        _timer = 100f;
     }
 
     private void Update()
@@ -40,9 +43,17 @@ public class GameManager : GenericSingleton<GameManager>
         }
     }
 
+    private void FixedUpdate()
+    {
+        _timer -= Time.deltaTime;
+    }
+
     public void NextLevel()
     {
-        StartCoroutine(NextLevelCoroutine());
+        if (!levelOver)
+        {
+            StartCoroutine(NextLevelCoroutine());
+        }
     }
 
     private IEnumerator NextLevelCoroutine()
@@ -51,8 +62,12 @@ public class GameManager : GenericSingleton<GameManager>
 
         playerManager.inputManager.LockControl();
 
-        ScoreManager.Instance.AddScore((int)maxVelocity, $"Max Velocity: + {(int)maxVelocity}");
-        ScoreManager.Instance.AddScore((int)(sumVelocity / _mediumCountInstance), $"Average Velocity: + {(int)(sumVelocity / _mediumCountInstance)}");
+        ScoreManager.Instance.AddScoreQueue((int)maxVelocity * 2, $"Max Velocity\n+{(int)maxVelocity} x2");
+        ScoreManager.Instance.AddScoreQueue((int)(sumVelocity / _mediumCountInstance) * 2, $"Average Velocity\n+{(int)(sumVelocity / _mediumCountInstance)} x2");
+        if ((int)(_timer * 2f) > 0)
+        {
+            ScoreManager.Instance.AddScoreQueue((int)(_timer * 2f), $"Time Bonus\n+{(int)(_timer * 2f)}");
+        }
 
         yield return new WaitForEndOfFrame();
         yield return new WaitUntil(() => !ScoreManager.Instance.onDisplaying);
@@ -81,6 +96,20 @@ public class GameManager : GenericSingleton<GameManager>
 
     public void Restart()
     {
+        if (!levelOver)
+        {
+            StartCoroutine(RestartLevelCoroutine());
+        }
+    }
+
+    private IEnumerator RestartLevelCoroutine()
+    {
+        levelOver = true;
+
+        _screenCoverAnimator.Play("Shoot");
+
+        yield return new WaitForSeconds(_endDelay);
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

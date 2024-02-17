@@ -15,7 +15,7 @@ public class BeeStink : MonoBehaviour
     {
         if (!stinkDisable && other.tag == "Player")
         {
-            Debug.Log("DED");
+            GameManager.Instance.Restart();
         }
     }
 }

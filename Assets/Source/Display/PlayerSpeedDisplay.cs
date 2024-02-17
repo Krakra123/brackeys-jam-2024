@@ -16,6 +16,6 @@ public class PlayerSpeedDisplay : MonoBehaviour
     private void Update()
     {
         _textGUI.text = _playerMotion.currentVelocity.ToString("F2");
-        _bar.sizeDelta = new Vector2(_playerMotion.currentVelocity * 5f, _bar.sizeDelta.y);
+        _bar.localScale = new Vector2(_playerMotion.currentVelocity / 70f, _bar.localScale.y);
     }
 }

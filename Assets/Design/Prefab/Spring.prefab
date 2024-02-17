@@ -123,7 +123,7 @@ MonoBehaviour:
   _usedSprite: {fileID: -2093391283, guid: 773e82cf862190c44b40565cf37aa8b1, type: 3}
   _unUsedSprite: {fileID: -1980460290, guid: 773e82cf862190c44b40565cf37aa8b1, type: 3}
   _cooldown: 0.2
-  _velocityBoost: 30
+  _velocityBoost: 35
 --- !u!1 &6182565914584494689
 GameObject:
   m_ObjectHideFlags: 0
