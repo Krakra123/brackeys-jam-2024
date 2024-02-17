@@ -38,8 +38,6 @@ public class PlayerMovementController : MonoBehaviour
     private float _jumpBufferTime;
 
     [Header("Kicking")]
-    // [SerializeField]
-    // private float _lockKickingTime;
     [SerializeField]
     private float _kickVelocityThreshhold;
     [SerializeField]
@@ -57,10 +55,12 @@ public class PlayerMovementController : MonoBehaviour
     private bool _onGround;
     private bool _canMove;
     private bool _canJump;
+    private bool _canKick;
     private bool _jumping;
     private bool _jumpCheckLock;
     private bool _kicking;
-    // private bool _lockKicking;
+
+    public bool canKick { get => _canKick; }
 
     private int _facingDirection;
 
@@ -271,16 +271,27 @@ public class PlayerMovementController : MonoBehaviour
         }
     }
 
+    public void ResetKick()
+    {
+        _canKick = true;
+    }
+
     private void KickHandle()
     {
+        if (!_lockKick)
+        {
+            if (_onGround) _canKick = true;
+        }
+
         _currentVelocity = Mathf.Lerp(_currentVelocity, _motion.currentVelocityMagnitude, .02f);
 
         if (!_kicking)
         {
-            if (!_lockKick && _currentVelocity >= _kickVelocityThreshhold && manager.inputManager.click)
+            if (_canKick && _currentVelocity >= _kickVelocityThreshhold && manager.inputManager.click)
             {
                 StartCoroutine(KickCoroutine());
                 _lockKick = true;
+                _canKick = false;
             }
         }
     }
@@ -309,12 +320,6 @@ public class PlayerMovementController : MonoBehaviour
     }
     private IEnumerator ExpireKicking()
     {
-        // _lockKicking = true;
-
-        // yield return new WaitForSeconds(_lockKickingTime);
-
-        // _lockKicking = false;
-
         yield return new WaitForSeconds(_kickDuration);
 
         if (_kicking)
@@ -322,8 +327,6 @@ public class PlayerMovementController : MonoBehaviour
             _kicking = false;
             manager.body.drag = 2f;
         }
-
-        yield return new WaitForSeconds(_kickCooldown);
 
         _lockKick = false;
     }

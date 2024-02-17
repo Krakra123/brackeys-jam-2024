@@ -19,6 +19,7 @@ public class PlayerInputManager : MonoBehaviour
     public Vector2 cursorDirection { get => _cursorDirection; }
 
     private bool _lockControl;
+    public bool controlLockState { get => _lockControl; }
 
     public void LockControl()
     {   
