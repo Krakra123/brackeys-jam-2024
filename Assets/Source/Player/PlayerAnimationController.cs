@@ -48,6 +48,7 @@ public class PlayerAnimationController : MonoBehaviour
         }
         else if (kicking)
         {
+            transform.Find("GhostEffect").GetComponent<GhostEffect>().Run(0.1f);
             if (kickDirection.y < Mathf.Cos(Mathf.PI / 8f * 7f))
             {
                 _animator.Play("Kick4");
