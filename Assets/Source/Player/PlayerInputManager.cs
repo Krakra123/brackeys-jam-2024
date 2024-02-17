@@ -45,10 +45,14 @@ public class PlayerInputManager : MonoBehaviour
         if (Input.GetButton("Right"))
         {
             _horizontalDirection = 1;
+            GameManager.Instance.StartTimer();
+
         }
         if (Input.GetButton("Left"))
         {
             _horizontalDirection = -1;
+            GameManager.Instance.StartTimer();
+
         }
         if (Input.GetButton("Right") && Input.GetButton("Left"))
         {
@@ -58,6 +62,8 @@ public class PlayerInputManager : MonoBehaviour
         if (Input.GetButtonDown("Jump"))
         {
             _jump = true;
+
+            GameManager.Instance.StartTimer();
         }
 
         if (Input.GetMouseButtonDown(0))
