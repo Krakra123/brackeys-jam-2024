@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2cb67504a3b9524281dad9d8590c8a3, type: 3}
+  m_Name: Kick
+  m_EditorClassIdentifier: 
+  Name: 
+  soundType: 3
+  audioClip: {fileID: 8300000, guid: 7b8310bc59690314e8a21cbe473b7eb1, type: 3}
+  audioMixer: {fileID: 24300002, guid: 34eb77cbf8f42f24f9315e936359cf55, type: 2}
+  loop: 0
+  volumeLow: 0.9
+  volumeHigh: 1
+  pitchLow: 0.9
+  pitchHigh: 1.1

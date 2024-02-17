@@ -22,6 +22,8 @@ public class Conveyor : MonoBehaviour
         GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.right * _direction);
         GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.right * _direction * _velocityBoost);
 
+        AudioManager.Instance.PlaySound(GameSound.Convey);
+
         StartCoroutine(Recover());
     }
 

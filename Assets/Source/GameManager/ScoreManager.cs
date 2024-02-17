@@ -40,7 +40,7 @@ public class ScoreManager : GenericSingleton<ScoreManager>
         _finalScore += ammout;
         displayScore += ammout;
 
-        StartCoroutine(DisplayMessage(message));
+        StartCoroutine(DisplayMessageRaw(message));
     }
 
     public void AddTime(float ammout)
@@ -70,6 +70,20 @@ public class ScoreManager : GenericSingleton<ScoreManager>
     }
 
     private IEnumerator DisplayMessage(string message)
+    {
+        _queueCount++;
+        ScorePopup popup = Instantiate(_scorePopupPrototype, GameManager.Instance.playerManager.transform.position, Quaternion.identity).GetComponent<ScorePopup>();
+        popup.Display(message);
+
+        AudioManager.Instance.PlaySound(GameSound.Ding);
+        
+        yield return new WaitForSeconds(_messageDisplayTime);
+
+        _queueCount--;
+        if (_queueCount == 0) onDisplaying = false;
+    }
+
+    private IEnumerator DisplayMessageRaw(string message)
     {
         _queueCount++;
         ScorePopup popup = Instantiate(_scorePopupPrototype, GameManager.Instance.playerManager.transform.position, Quaternion.identity).GetComponent<ScorePopup>();

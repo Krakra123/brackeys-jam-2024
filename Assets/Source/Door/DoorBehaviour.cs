@@ -33,6 +33,7 @@ public class DoorBehaviour : MonoBehaviour
             GameManager.Instance.NextLevel();
             float velocity = GameManager.Instance.playerManager.movementController.currentVelocity;
             ScoreManager.Instance.AddScoreQueue((int)velocity * 3, $"Door kick Velocity\n+{(int)velocity} x3");
+            AudioManager.Instance.PlaySound(GameSound.DoorKick);
         }
     }
 }
