@@ -29,6 +29,8 @@ public class SpringBehaviour : MonoBehaviour
         GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.up);
         GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.up * _velocityBoost);
 
+        AudioManager.Instance.PlaySound(GameSound.Spring);
+
         StartCoroutine(Recover());
     }
 
