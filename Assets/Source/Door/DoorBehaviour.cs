@@ -26,9 +26,13 @@ public class DoorBehaviour : MonoBehaviour
             _isOpen = true;
             _renderer.sprite = _openSprite;
 
-            GameManager.Instance.playerManager.inputManager.LockControl();
+            // GameManager.Instance.playerManager.inputManager.LockControl();
             GameManager.Instance.playerManager.body.velocity = Vector2.zero;
             GameManager.Instance.playerManager.spriteRenderer.color = new Color(0f, 0f, 0f, 0f);
+
+            GameManager.Instance.NextLevel();
+            float velocity = GameManager.Instance.playerManager.movementController.currentVelocity;
+            ScoreManager.Instance.AddScore((int)velocity * 3, $"Kick-the-door Velocity: + {(int)velocity}x3");
         }
     }
 }

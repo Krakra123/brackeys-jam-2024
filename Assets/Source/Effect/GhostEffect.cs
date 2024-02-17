@@ -32,7 +32,6 @@ public class GhostEffect : MonoBehaviour
 
     void Spawm_FX()
     {
-        Debug.Log("Spawm_FX");
         GameObject _Ghost = Instantiate(_ghost, transform.position, Quaternion.identity);
         _Ghost.GetComponent<SpriteRenderer>().sprite = _sprite.GetComponent<SpriteRenderer>().sprite;
         _Ghost.transform.localScale = _sprite.transform.localScale;
