@@ -19,8 +19,6 @@ public class GameManager : GenericSingleton<GameManager>
     public bool levelOver { get; private set; }
 
     public float maxVelocity { get; private set; }
-    public float sumVelocity { get; private set; }
-    private int _mediumCountInstance = 0;
 
     private float _bonusTimer;
 
@@ -43,8 +41,6 @@ public class GameManager : GenericSingleton<GameManager>
         if (!levelOver)
         {
             maxVelocity = Mathf.Max(maxVelocity, playerManager.movementController.currentVelocity);
-            sumVelocity += playerManager.movementController.currentVelocity;
-            _mediumCountInstance++;
         }
     }
 
@@ -79,7 +75,6 @@ public class GameManager : GenericSingleton<GameManager>
         playerManager.inputManager.LockControl();
 
         ScoreManager.Instance.AddScoreQueue((int)maxVelocity * 2, $"Max Velocity\n+{(int)maxVelocity} x2");
-        ScoreManager.Instance.AddScoreQueue((int)(sumVelocity / _mediumCountInstance) * 2, $"Average Velocity\n+{(int)(sumVelocity / _mediumCountInstance)} x2");
         if ((int)(_bonusTimer * 2f) > 0)
         {
             ScoreManager.Instance.AddScoreQueue((int)(_bonusTimer * 2f), $"Time Bonus\n+{(int)(_bonusTimer * 2f)}");

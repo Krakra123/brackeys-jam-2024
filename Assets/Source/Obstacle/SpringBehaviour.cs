@@ -24,6 +24,7 @@ public class SpringBehaviour : MonoBehaviour
     {
         _used = true;
         _renderer.sprite = _usedSprite;
+        GameManager.Instance.playerManager.movementController.ResetKick();
 
         GameManager.Instance.playerManager.movementController.SwitchDirection(Vector2.up);
         GameManager.Instance.playerManager.motionManager.AddBonusVelocity(Vector2.up * _velocityBoost);

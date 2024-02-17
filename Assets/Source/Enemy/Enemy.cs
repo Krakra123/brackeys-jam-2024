@@ -45,6 +45,7 @@ public class Enemy : MonoBehaviour
     public virtual void Kill()
     {
         ScoreManager.Instance.AddScoreRaw(20, "+20");
+        GameManager.Instance.playerManager.movementController.ResetKick();
 
         GameManager.Instance.playerManager.movementController.SwitchDirection(new Vector2(
             Mathf.Sign(GameManager.Instance.playerManager.body.velocity.x),
