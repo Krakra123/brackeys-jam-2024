@@ -68,11 +68,12 @@ public class BreakablePlatform : MonoBehaviour
         bool Hit = false;
         if (_crack == false)
         {
-            Vector2 RayPos = new Vector2(transform.position.x - 0.4f, transform.position.y + 0.51f);
+            Vector2 RayPos = new Vector2(transform.position.x - 0.4f, transform.position.y + 0.52f);
             RaycastHit2D RayHit = Physics2D.Raycast(RayPos, Vector2.right, 0.8f);
             Debug.DrawRay(RayPos, Vector2.right * 0.8f,Color.green);
             if (RayHit.collider != null)
             {
+                Debug.Log("crack");
                 Hit = true;
             }
         }
