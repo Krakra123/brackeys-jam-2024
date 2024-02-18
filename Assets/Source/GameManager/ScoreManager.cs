@@ -67,6 +67,7 @@ public class ScoreManager : GenericSingleton<ScoreManager>
                 _scoreQueue.Dequeue();
             }
         }
+
     }
 
     private IEnumerator DisplayMessage(string message)
@@ -93,5 +94,12 @@ public class ScoreManager : GenericSingleton<ScoreManager>
 
         _queueCount--;
         if (_queueCount == 0) onDisplaying = false;
+    }
+
+    public void ResetAll()
+    {
+        _finalScore = 0;
+        _finalTime = 0f;
+        displayScore = 0;
     }
 }
