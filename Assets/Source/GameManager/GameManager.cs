@@ -38,7 +38,7 @@ public class GameManager : GenericSingleton<GameManager>
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I)) Restart();
+        if (Input.GetKeyDown(KeyCode.R)) Restart();
 
         if (!levelOver)
         {
