@@ -40,6 +40,7 @@ public class CameraMan : MonoBehaviour
     private void Start()
     {
         _player = GameManager.Instance.playerManager.gameObject;
+        transform.position = new Vector3(_cameraBounds[0].position.x, 0, 0);
     }
 
     private void Update()

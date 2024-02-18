@@ -19,7 +19,7 @@ public class Tutorial : MonoBehaviour
         }
         else
         {
-            _transparent -= Time.deltaTime * 4;
+            _transparent -= Time.deltaTime ;
             _transparent = Mathf.Clamp(_transparent, 0, 1);
             GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, _transparent);
         }
