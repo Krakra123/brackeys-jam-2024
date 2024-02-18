@@ -43,7 +43,7 @@ public class CameraMan : MonoBehaviour
         transform.position = new Vector3(_cameraBounds[0].position.x, 0, 0);
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Timer();
 
@@ -100,7 +100,7 @@ public class CameraMan : MonoBehaviour
             newCameraPosition.x = Mathf.Lerp(
                 newCameraPosition.x, 
                 target, 
-                _camaraFollowSmoothness
+                _camaraFollowSmoothness * 6f
             );
 
             if (Mathf.Abs(newCameraPosition.x - target) < SNAPDISTANCE) 
@@ -120,7 +120,7 @@ public class CameraMan : MonoBehaviour
             newCameraPosition.y = Mathf.Lerp(
                 newCameraPosition.y, 
                 target, 
-                _camaraFollowSmoothness
+                _camaraFollowSmoothness * 6f
             );
 
             if (Mathf.Abs(newCameraPosition.y - target) < SNAPDISTANCE) 
