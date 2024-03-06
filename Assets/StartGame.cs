@@ -15,7 +15,8 @@ public class StartGame : MonoBehaviour
 
     private void Update()
     {
-        if (Input.anyKeyDown || Input.GetMouseButtonDown(0))
+        string strInput = Input.inputString;
+        if (!string.IsNullOrEmpty(strInput) || Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.Return) || Input.GetMouseButtonDown(0))
         {
             if (!go) StartCoroutine(GoGame());
         }
